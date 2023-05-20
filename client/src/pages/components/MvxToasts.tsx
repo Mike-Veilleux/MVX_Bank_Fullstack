@@ -26,7 +26,7 @@ const MvxToasts = ({
         bg={color}
       >
         <Toast.Header>
-          <strong className="me-auto">{`Bad Bank ${title}`}</strong>
+          <strong className="me-auto">{`MVX Bank ${title}`}</strong>
           {date !== null && <small>{date}</small>}
         </Toast.Header>
         <Toast.Body className="text-white">{body}</Toast.Body>

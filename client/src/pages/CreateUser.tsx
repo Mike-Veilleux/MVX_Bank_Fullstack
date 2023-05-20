@@ -1,10 +1,11 @@
-import { Fragment, useState } from "react";
-import { Card, Button, Form } from "react-bootstrap";
 import { useFormik } from "formik";
+import { Fragment, useState } from "react";
+import { Button, Card, Form } from "react-bootstrap";
+import { CreateUser, IUser } from "../interfaces/IUser";
+import { useAccount_API } from "../stores/useAccountsStore";
+import { useUser, useUser_API } from "../stores/useUserStore";
+import { nameof } from "../uitls/nameof";
 import { createAccountSchema } from "../validation/YupValidationSchemas";
-import { IAccount, IUserCredential } from "../interfaces/interfaces";
-import { useStoreAccounts, useStoreActions } from "../stores/useAccountsStore";
-import uuid from "react-uuid";
 import {
   InputEmail,
   InputPassword,
@@ -12,44 +13,46 @@ import {
 } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
 
-const CreateAccount = () => {
+const CreateNewUser = () => {
+  const user = useUser();
+  const user_API = useUser_API();
+  const account_API = useAccount_API();
+
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
   const [showEmailExistAlert, setShowEmailExistAlert] =
     useState<boolean>(false);
-  const [isFirstAccount, setIsFirstAccount] = useState(true);
-  const accountStore = useStoreAccounts();
-  const accountActions = useStoreActions();
+  const [isFirstUserCreated, setIsFirstUserCreated] = useState(true);
 
-  const initialFormValues: IUserCredential = {
-    fullName: "",
+  const initialFormValues: IUser = {
+    name: "",
     email: "",
     password: "",
   };
 
   const formik = useFormik({
     initialValues: initialFormValues,
-    onSubmit: (values, { resetForm }) => {
-      const matchingEmail = accountStore?.find(
-        (acc) => acc.credentials?.email === values.email
+    onSubmit: async (values, { resetForm }) => {
+      let newUser: IUser = CreateUser(
+        values.name,
+        values.email,
+        values.password
       );
-      if (matchingEmail) {
-        setShowEmailExistAlert(true);
-      } else {
-        const newAccount = {} as IAccount;
-        newAccount.credentials = { ...values };
-        newAccount.id = uuid();
-        newAccount.balance = 0;
-        newAccount.history = [];
-        accountActions.addAccount(newAccount);
-        accountActions.setActiveAccount(newAccount.id);
-        setIsFirstAccount(false);
+      const isNewAccount = await user_API.CreateNewUser(newUser);
+      console.log(
+        "🚀 ~ file: CreateUser.tsx:41 ~ onSubmit: ~ isNewAccount:",
+        isNewAccount
+      );
+      if (isNewAccount) {
+        setIsFirstUserCreated(false);
         setShowSuccessAlert(true);
         resetForm({ values: initialFormValues });
+      } else {
+        setShowEmailExistAlert(true);
       }
     },
     validationSchema: createAccountSchema,
   });
-
+  const userAsType: IUser = CreateUser("", "", "");
   return (
     <Fragment>
       <Card className="shadow" style={{ width: "24em" }}>
@@ -64,14 +67,18 @@ const CreateAccount = () => {
           <Form onSubmit={formik.handleSubmit}>
             <InputUserName
               formik={formik}
-              objectName={"fullName"}
+              objectName={nameof(userAsType, (x) => x.name!)}
               label={"Name"}
             />
-            <InputEmail formik={formik} objectName={"email"} label={"Email"} />
+            <InputEmail
+              formik={formik}
+              objectName={nameof(userAsType, (x) => x.email!)}
+              label={"Email"}
+            />
 
             <InputPassword
               formik={formik}
-              objectName={"password"}
+              objectName={nameof(userAsType, (x) => x.password!)}
               label={"Password"}
             />
             <Button
@@ -80,7 +87,7 @@ const CreateAccount = () => {
               disabled={!(formik.isValid && formik.dirty)}
               style={{ width: "100%" }}
             >
-              {isFirstAccount ? "Create Account" : "Create Another Account"}
+              {isFirstUserCreated ? "Create Account" : "Create Another Account"}
             </Button>
           </Form>
         </Card.Body>
@@ -99,11 +106,11 @@ const CreateAccount = () => {
         setShow={setShowSuccessAlert}
         title={""}
         date={null}
-        body={"Account created succesfully!"}
+        body={"Account created successfully!"}
         color={"success"}
       />
     </Fragment>
   );
 };
 
-export default CreateAccount;
+export default CreateNewUser;

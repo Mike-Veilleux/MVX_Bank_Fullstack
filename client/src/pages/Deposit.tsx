@@ -1,26 +1,40 @@
-import { useState } from "react";
-import { Card, Button, Form, Stack } from "react-bootstrap";
 import { format } from "date-fns";
 import { useFormik } from "formik";
-import { transactionAmountSchema } from "../validation/YupValidationSchemas";
-import { ETransactionType, ITransaction } from "../interfaces/interfaces";
+import { useState } from "react";
+import { Button, Card, Form, Stack } from "react-bootstrap";
+import { ETransactionType, IAccountType } from "../interfaces/ENUMS";
+import { IAccount } from "../interfaces/IAccount";
+import { CreateTransaction, ITransaction } from "../interfaces/ITransaction";
 import {
-  useStoreAccounts,
-  useStoreActions,
-  useStoreActiveAccountID,
+  useAccount,
+  useAccount_ACTIONS,
+  useAccount_API,
 } from "../stores/useAccountsStore";
+import { useUser } from "../stores/useUserStore";
+import { nameof } from "../uitls/nameof";
+import { transactionAmountSchema } from "../validation/YupValidationSchemas";
 import { InputAmount } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
 
 const Deposit = () => {
-  const accounts = useStoreAccounts();
-  const activeAccountID = useStoreActiveAccountID();
-  const accountActions = useStoreActions();
-  const activeAccount = accounts?.find(
-    (account) => account.id === activeAccountID
+  const user = useUser();
+  const account = useAccount();
+  const account_ACTIONS = useAccount_ACTIONS();
+  const account_API = useAccount_API();
+
+  const transactionAsType = CreateTransaction(
+    undefined,
+    undefined,
+    undefined,
+    undefined
   );
 
   const [showToast, setShowToast] = useState<boolean>(false);
+  const [selectedAccountType, setSelectedAccountType] = useState<IAccount>();
+
+  function handleSelectAccount(e: any) {
+    setSelectedAccountType(e.target.value);
+  }
 
   const initialFormValue: ITransaction = {
     sort: ETransactionType.DEPOSIT,
@@ -30,13 +44,28 @@ const Deposit = () => {
 
   const formik = useFormik({
     initialValues: initialFormValue,
-    onSubmit: (values, { resetForm }) => {
-      values.date = new Date(Date.now());
-      activeAccount!.balance = activeAccount!.balance! + values.amount!;
-      activeAccount?.history?.push(values);
-      accountActions.updateAccounts(activeAccount!);
-      setShowToast(true);
-      resetForm({ values: initialFormValue });
+    onSubmit: async (values, { resetForm }) => {
+      let updatedAccount: IAccount = await account_API.UpdateBalance(
+        user?._id!,
+        values.amount!
+      );
+
+      if (updatedAccount !== undefined) {
+        const newTransaction = CreateTransaction(
+          user?.name,
+          ETransactionType.DEPOSIT,
+          values.amount!,
+          new Date(Date.now())
+        );
+        updatedAccount = await account_API.AddTransactionToAccount(
+          updatedAccount._id!,
+          newTransaction
+        );
+        account_ACTIONS.setActiveAccount(updatedAccount);
+
+        setShowToast(true);
+        resetForm({ values: initialFormValue });
+      }
     },
     validationSchema: transactionAmountSchema,
   });
@@ -55,13 +84,20 @@ const Deposit = () => {
             <Stack gap={1}>
               <Stack direction="horizontal" gap={2}>
                 <div>Current Balance:</div>
-                <div style={{ fontWeight: "bold" }}>
-                  {activeAccount!.balance}$
-                </div>
+                <div style={{ fontWeight: "bold" }}>{account!.balance}$</div>
               </Stack>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                // onChange={(e, val) => handleSelectAccount(val)}
+              >
+                <option selected>Select Account</option>
+                <option value="1">{IAccountType.SAVINGS}</option>
+                <option value="2">{IAccountType.CHECK}</option>
+              </select>
               <InputAmount
                 formik={formik}
-                objectName={"amount"}
+                objectName={nameof(transactionAsType, (x) => x.amount!)}
                 label={"Deposit Amount"}
               />
               <Button
@@ -77,20 +113,18 @@ const Deposit = () => {
         </Card.Body>
       </Card>
 
-      {!activeAccount?.history?.length ? null : (
+      {!account?.history?.length ? null : (
         <MvxToasts
           show={showToast}
           setShow={setShowToast}
           title={""}
           date={format(
-            new Date(
-              activeAccount?.history![activeAccount?.history!.length - 1].date!
-            ),
+            new Date(account?.history![account?.history!.length - 1].date!),
             "EE dd MMMM yyyy HH:mm:ss"
           )}
           body={`Successfully deposited ${
-            activeAccount?.history![activeAccount?.history!.length - 1].amount
-          }$ in ${activeAccount?.credentials?.fullName}'s account!`}
+            account?.history![account?.history!.length - 1].amount
+          }$ in ${user?.name}'s account!`}
           color={"success"}
         />
       )}

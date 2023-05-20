@@ -4,13 +4,13 @@ export interface IUser {
   _id?: string;
   name?: string;
   email?: string;
-  passwordHash?: string;
+  password?: string;
 }
 
 export const userSchema = new Schema<IUser>({
   name: { type: String },
   email: { type: String },
-  passwordHash: { type: String },
+  password: { type: String },
 });
 
 export const User = model("User", userSchema);

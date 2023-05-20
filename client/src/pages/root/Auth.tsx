@@ -1,14 +1,14 @@
 import { Navigate } from "react-router-dom";
-import { useStoreActiveAccountID } from "../../stores/useAccountsStore";
+import { useUser } from "../../stores/useUserStore";
 
 type PrivateProps = {
   children: JSX.Element;
 };
 
 const Auth = ({ children }: PrivateProps) => {
-  const activeAccountID = useStoreActiveAccountID();
+  const loggedinUser = useUser();
 
-  if (!activeAccountID) {
+  if (loggedinUser === undefined) {
     return <Navigate to="/restricted-access" />;
   }
 

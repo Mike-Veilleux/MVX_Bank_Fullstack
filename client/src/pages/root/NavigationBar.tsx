@@ -1,9 +1,4 @@
-import { useEffect } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import {
-  useStoreActions,
-  useStoreActiveAccountID,
-} from "../../stores/useAccountsStore";
 import LoginSwitch from "../components/LoginSwitch";
 
 const NavigationBar = () => {
@@ -16,17 +11,10 @@ const NavigationBar = () => {
     allData: "View everyone's bank data!",
   };
 
-  const activeAccountID = useStoreActiveAccountID();
-  const accountActions = useStoreActions();
-
-  useEffect(() => {
-    accountActions.loadAccountsFromLocalStorage();
-  }, []);
-
   return (
     <Navbar bg="dark" variant="dark" expand="md">
       <Container>
-        <Navbar.Brand href="/#/home">Bad Bank</Navbar.Brand>
+        <Navbar.Brand href="/#/home">MVX Bank</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -67,7 +55,7 @@ const NavigationBar = () => {
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
-        <LoginSwitch activeAccountID={activeAccountID} />
+        <LoginSwitch />
       </Container>
     </Navbar>
   );

@@ -1,36 +1,37 @@
-import { Fragment, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Card, Form } from "react-bootstrap";
 import { useFormik } from "formik";
+import { Fragment, useState } from "react";
+import { Button, Card, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { ILoginValidation } from "../interfaces/ILoginValidation";
+import { useAccount_API } from "../stores/useAccountsStore";
+import { useUser, useUser_ACTIONS, useUser_API } from "../stores/useUserStore";
 import { loginAccountSchema } from "../validation/YupValidationSchemas";
-import { ILogin } from "../interfaces/interfaces";
-import { useStoreAccounts, useStoreActions } from "../stores/useAccountsStore";
 import { InputEmail, InputPassword } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
 
 const Login = () => {
   const [showFailLoginAlert, setShowFailLoginAlert] = useState<boolean>(false);
   const navigate = useNavigate();
-  const accountStore = useStoreAccounts();
-  const accountActions = useStoreActions();
+  const user = useUser();
+  const user_ACTIONS = useUser_ACTIONS();
+  const user_API = useUser_API();
+  const account_API = useAccount_API();
 
-  const initialFormValues: ILogin = {
+  const initialFormValues: ILoginValidation = {
     email: "",
     password: "",
   };
 
   const formik = useFormik({
     initialValues: initialFormValues,
-    onSubmit: (values, { resetForm }) => {
-      const matchingAccount = accountStore?.find(
-        (acc) =>
-          acc.credentials?.email === values.email &&
-          acc.credentials?.password === values.password
+    onSubmit: async (values, { resetForm }) => {
+      const isValidLogin = await user_API.SubmitLogin(
+        values.email!,
+        values.password!
       );
-      if (matchingAccount) {
-        accountActions.setActiveAccount(matchingAccount!.id!);
+      if (isValidLogin) {
         resetForm({ values: initialFormValues });
-        navigate("/all-data");
+        navigate("/home");
       } else {
         setShowFailLoginAlert(true);
       }
@@ -46,7 +47,7 @@ const Login = () => {
         </Card.Header>
         <Card.Body>
           <Card.Text className="text-muted">
-            Login into your accout to access our services.
+            Login into your account to access our services.
           </Card.Text>
           <Form onSubmit={formik.handleSubmit}>
             <InputEmail formik={formik} objectName={"email"} label={"Email"} />

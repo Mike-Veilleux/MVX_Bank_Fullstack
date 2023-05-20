@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import http from "http";
 import mongoose from "mongoose";
+import { routerAccount } from "./routers/routerAccount";
 import { routerPing } from "./routers/routerPing";
 import { routerUser } from "./routers/routerUser";
 
@@ -19,10 +20,12 @@ app.use(
 
 app.use("/ping", routerPing);
 app.use("/user", routerUser);
+app.use("/account", routerAccount);
 
 const httpServer = http.createServer(app);
 
 mongoose.set("strictQuery", true);
+//mongoose.set("useFindAndModify", false);
 mongoose.connect(process.env.DB_CONNECTION_STRING!);
 const db = mongoose.connection;
 db.on("error", (error) => console.log(error));

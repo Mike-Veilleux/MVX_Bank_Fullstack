@@ -1,10 +1,7 @@
-import React from "react";
-import { Card, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Card } from "react-bootstrap";
 import bank from "../assets/Bank.svg";
 
 const Home = () => {
-  const navigate = useNavigate();
   return (
     <Card className="text-center shadow" style={{ width: "24em" }}>
       <Card.Header as="h5" className="text-center">

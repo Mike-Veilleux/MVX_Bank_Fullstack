@@ -11,7 +11,7 @@ export const InputUserName = ({ formik, objectName, label }: PrivateProps) => {
       <Form.Label>{label}</Form.Label>
       <Form.Control
         type="text"
-        name="fullName"
+        name={objectName}
         placeholder="Enter name"
         value={formik.values[objectName]}
         onChange={formik.handleChange}
@@ -28,7 +28,7 @@ export const InputEmail = ({ formik, objectName, label }: PrivateProps) => {
       <Form.Label>{label}</Form.Label>
       <Form.Control
         type="text"
-        name="email"
+        name={objectName}
         placeholder="Enter email"
         value={formik.values[objectName]}
         onChange={formik.handleChange}
@@ -45,7 +45,7 @@ export const InputPassword = ({ formik, objectName, label }: PrivateProps) => {
       <Form.Label>{label}</Form.Label>
       <Form.Control
         type="password"
-        name="password"
+        name={objectName}
         placeholder="Enter password"
         value={formik.values[objectName]}
         onChange={formik.handleChange}
@@ -62,7 +62,7 @@ export const InputAmount = ({ formik, objectName, label }: PrivateProps) => {
       <Form.Label>{label}</Form.Label>
       <Form.Control
         type="number"
-        name="amount"
+        name={objectName}
         placeholder="Enter amount"
         value={formik.values[objectName]}
         onChange={formik.handleChange}

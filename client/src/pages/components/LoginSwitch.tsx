@@ -1,29 +1,19 @@
-import React from "react";
 import { Button, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { IAccount } from "../../interfaces/interfaces";
-import {
-  useStoreAccounts,
-  useStoreActions,
-} from "../../stores/useAccountsStore";
+import { useUser, useUser_ACTIONS } from "../../stores/useUserStore";
 
-type PrivateProps = {
-  activeAccountID: string | undefined;
-};
-const LoginSwitch = ({ activeAccountID }: PrivateProps) => {
-  const accounts = useStoreAccounts();
-  const accountActions = useStoreActions();
+const LoginSwitch = () => {
+  const user = useUser();
+  const user_ACTIONS = useUser_ACTIONS();
   const navigate = useNavigate();
-  const activeUserName = accounts?.find((a) => a.id === activeAccountID)
-    ?.credentials?.fullName;
 
   const onLogout = () => {
-    accountActions.setActiveAccount("");
-    navigate("/all-data");
+    user_ACTIONS.setActiveUser(undefined);
+    navigate("/home");
   };
 
   const renderLogin = () => {
-    if (activeAccountID) {
+    if (user !== undefined) {
       return (
         <Stack direction={"horizontal"} style={{ paddingRight: "20px" }}>
           <div
@@ -33,7 +23,7 @@ const LoginSwitch = ({ activeAccountID }: PrivateProps) => {
               color: "white",
             }}
           >
-            {activeUserName}
+            {user?.name}
           </div>
           <Button variant="secondary" size="sm" onClick={() => onLogout()}>
             Logout
