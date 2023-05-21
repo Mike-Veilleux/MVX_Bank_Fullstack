@@ -4,6 +4,7 @@ import CreateNewUser from "./pages/CreateUser";
 import Deposit from "./pages/Deposit";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Transactions from "./pages/Transactions";
 import Withdraw from "./pages/Withdraw";
 import Auth from "./pages/root/Auth";
 import Layout from "./pages/root/Layout";
@@ -34,6 +35,14 @@ function App() {
           element={
             <Auth>
               <Withdraw />
+            </Auth>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <Auth>
+              <Transactions />
             </Auth>
           }
         />

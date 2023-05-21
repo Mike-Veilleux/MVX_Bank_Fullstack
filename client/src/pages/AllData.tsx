@@ -1,15 +1,10 @@
 // import { useState } from "react";
 // import { Button, Card, Container, Table } from "react-bootstrap";
 // import { IAccount } from "../interfaces/IAccount";
-// import {
-//   useAccount_ACTIONS,
-//   useAccounts_STORE,
-// } from "../stores/useAccountsStore";
-// import HistoryModal from "./components/HistoryModal";
+// import { useUser_API } from "../stores/useUserStore";
 
 // const AllData = () => {
-//   const accountStore = useAccounts_STORE();
-//   const accountActions = useAccount_ACTIONS();
+// const user_API = useUser_API()
 
 //   const [show, setShow] = useState(false);
 //   const [selectedAccountForHistory, setSelectedAccountForHistory] = useState<

@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { Button, Card, Form, Stack } from "react-bootstrap";
-import { ETransactionType, IAccountType } from "../interfaces/ENUMS";
+import { ETransactionType } from "../interfaces/ENUMS";
 import { IAccount } from "../interfaces/IAccount";
 import { CreateTransaction, ITransaction } from "../interfaces/ITransaction";
 import {
@@ -86,7 +86,7 @@ const Deposit = () => {
                 <div>Current Balance:</div>
                 <div style={{ fontWeight: "bold" }}>{account!.balance}$</div>
               </Stack>
-              <select
+              {/* <select
                 className="form-select"
                 aria-label="Default select example"
                 // onChange={(e, val) => handleSelectAccount(val)}
@@ -94,7 +94,7 @@ const Deposit = () => {
                 <option selected>Select Account</option>
                 <option value="1">{IAccountType.SAVINGS}</option>
                 <option value="2">{IAccountType.CHECK}</option>
-              </select>
+              </select> */}
               <InputAmount
                 formik={formik}
                 objectName={nameof(transactionAsType, (x) => x.amount!)}

@@ -73,3 +73,14 @@ routerAccount.post("/add-transaction", async (req: Request, res: Response) => {
     res.send(account);
   }
 });
+
+// routerAccount.get("/all", async (req: Request, res: Response) => {
+//   const user = await User.find();
+
+//   if (user === null) {
+//     res.status(204);
+//   } else {
+//     console.log(user);
+//     res.status(200).send(user);
+//   }
+// });

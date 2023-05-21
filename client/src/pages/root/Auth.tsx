@@ -6,9 +6,9 @@ type PrivateProps = {
 };
 
 const Auth = ({ children }: PrivateProps) => {
-  const loggedinUser = useUser();
+  const user = useUser();
 
-  if (loggedinUser === undefined) {
+  if (user === undefined) {
     return <Navigate to="/restricted-access" />;
   }
 

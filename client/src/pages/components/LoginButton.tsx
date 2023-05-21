@@ -2,7 +2,7 @@ import { Button, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUser, useUser_ACTIONS } from "../../stores/useUserStore";
 
-const LoginSwitch = () => {
+const LoginButton = () => {
   const user = useUser();
   const user_ACTIONS = useUser_ACTIONS();
   const navigate = useNavigate();
@@ -48,4 +48,4 @@ const LoginSwitch = () => {
   return <>{renderLogin()}</>;
 };
 
-export default LoginSwitch;
+export default LoginButton;
