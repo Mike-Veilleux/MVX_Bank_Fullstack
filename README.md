@@ -4,9 +4,13 @@
 
 Banking capstone project for my MIT xPro Fullstack course.
 
+---
+
 ## Motivation
 
 This project is a recap of what I've learned throughout the last year in my MERN Fullstack course. I'm coming from a desktop/.NET background with zero knowledge of web development. I started with learning Javascript and slowly progressing to Typescript. Followed by HTML and CSS basics, moving on to React NodeJS and MongoDB. We covered some of the tech leader such as, Docker, OAuth, Firebase, Redis, Graphql, Bootstrap, Formik, Yup and many more...
+
+---
 
 ## Description
 
@@ -21,6 +25,8 @@ In this version, you will find:
 - Withdrawal
 - Transaction log
 
+---
+
 ## Features
 
 ### State management
@@ -30,6 +36,8 @@ While learning a lot on react States, I also became aware of state management an
 ### Database
 
 Having experienced the joy and pain of SQL database in the past made me really appreciate the ease of use of the new generation of NoSQL solution such as [MongoDB](https://www.mongodb.com/). I've spent a lot of extra time getting acquainted with the inner workings of it. [Mongoose](https://mongoosejs.com/) npm package was a real joy to use since you can create a relational system on top of Mongo Documents, which I believe is a winning combination. I this release, you will also notice that I'm using a lot of database functions such as modifying the account balance and pushing new items to array directly from Mongo. This is helping reduce request traffic and minimize data concurrency.
+
+---
 
 ## Install
 
@@ -47,11 +55,16 @@ Run project
 npm run dev
 ```
 
-**NOTE** If you don't have [MongoDB & Compass](https://www.mongodb.com/docs/compass/master/install/) installed locally you will need to get that up and running. You can also run it from a [Docker](https://www.docker.com/products/docker-desktop/) container from the following terminal command:
+---
+
+**DATABASE**
+If you don't have [MongoDB & Compass](https://www.mongodb.com/docs/compass/master/install/) installed locally you will need to get that up and running. You can also run it from a [Docker](https://www.docker.com/products/docker-desktop/) container from the following terminal command:
 
 ```
 docker run -p 27017:27017 --name MVX_Bank -d mongo
 ```
+
+---
 
 **.ENV FILES**
 Create a **.env.development** file at the root of the **server** folder for mapping the database port and connection string.
@@ -66,6 +79,8 @@ Create a **.env.development** file at the root of the **client** folder for mapp
 ```
 VITE_API_BASE_URL=http://localhost:1337
 ```
+
+---
 
 ## Licensing
 
