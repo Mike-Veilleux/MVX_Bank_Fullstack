@@ -45,16 +45,16 @@ In this version, you will find:
 
 ### Back-End
 
-| Package      | Version | Description                     |
-| :----------- | :-----: | :------------------------------ |
-| Concurrently |  7.6.0  | Runtime library                 |
-| Cors         |  2.8.5  | Cross origin manager            |
-| Dotenv       | 16.0.3  | Environnement variables library |
-| Express      | 4.18.2  | Routing framework               |
-| Mongoose     |  6.8.2  | MongoDB framework               |
-| Node JS      | 18.2.0  | Back-end runtime                |
-| Nodemon      | 2.0.20  | Runtime library                 |
-| Typescript   |  5.0.4  | Javascript support for Type     |
+| Package      | Version | Description                   |
+| :----------- | :-----: | :---------------------------- |
+| Concurrently |  7.6.0  | Runtime library               |
+| Cors         |  2.8.5  | Cross origin manager          |
+| Dotenv       | 16.0.3  | Environment variables library |
+| Express      | 4.18.2  | Routing framework             |
+| Mongoose     |  6.8.2  | MongoDB framework             |
+| Node JS      | 18.2.0  | Back-end runtime              |
+| Nodemon      | 2.0.20  | Runtime library               |
+| Typescript   |  5.0.4  | Javascript support for Type   |
 
 ### Toolchain Stack
 
@@ -104,7 +104,7 @@ If you don't have [MongoDB & Compass](https://www.mongodb.com/docs/compass/maste
 docker run -p 27017:27017 --name MVX_Bank -d mongo
 ```
 
-## Environnement files
+## Environment files
 
 Create a **.env.development** file at the root of the **server** folder for mapping the database port and connection string.
 
