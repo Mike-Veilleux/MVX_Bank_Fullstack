@@ -56,8 +56,6 @@ If you don't have [MongoDB & Compass](https://www.mongodb.com/docs/compass/maste
 docker run -p 27017:27017 --name MVX_Bank -d mongo
 ```
 
----
-
 **.ENV FILES**
 Create a **.env.development** file at the root of the **server** folder for mapping the database port and connection string.
 
@@ -71,8 +69,6 @@ Create a **.env.development** file at the root of the **client** folder for mapp
 ```
 VITE_API_BASE_URL=http://localhost:1337
 ```
-
----
 
 ## Licensing
 
