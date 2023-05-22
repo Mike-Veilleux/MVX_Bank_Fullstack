@@ -21,6 +21,23 @@ In this version, you will find:
 - Withdrawal
 - Transaction log
 
+## Tech Stack
+
+| Target | Package                 | Version |
+| :----- | :---------------------- | :-----: |
+| Client | React                   | 18.2.0  |
+| Client | React-dom               | 18.2.0  |
+| Client | React-router-dom        | 18.2.0  |
+| Client | React-uuid              |  2.0.0  |
+| Client | React-bootstrap         |  2.7.4  |
+| Client | Bootstrap               |  5.2.3  |
+| Client | Axios                   |  1.4.0  |
+| Client | Date-fns                | 2.30.0  |
+| Client | Formik                  |  2.2.9  |
+| Client | Yup                     |  1.0.2  |
+| Client | Zustand                 |  4.3.8  |
+| Client | Simple-zustand-devtools |  1.1.0  |
+
 ## Features
 
 ### State management
@@ -30,6 +47,14 @@ While learning a lot on react States, I also became aware of state management an
 ### Database
 
 Having experienced the joy and pain of SQL database in the past made me really appreciate the ease of use of the new generation of NoSQL solution such as [MongoDB](https://www.mongodb.com/). I've spent a lot of extra time getting acquainted with the inner workings of it. [Mongoose](https://mongoosejs.com/) npm package was a real joy to use since you can create a relational system on top of Mongo Documents, which I believe is a winning combination. I this release, you will also notice that I'm using a lot of database functions such as modifying the account balance and pushing new items to array directly from Mongo. This is helping reduce request traffic and minimize data concurrency.
+
+### Authentication
+
+I'm presently implementing OAuth for Google authentication, but it is not ready yet. It should be done before the end of June 2023.
+
+### UI
+
+I'm planning to refactor the UI from Bootstrap to Radix. I'm very interested in headless components and plan to develop my own stylized component library. The implementation should happen during summer 2023.
 
 # Installation
 
