@@ -66,7 +66,7 @@ In this version, you will find:
 
 ### State management
 
-While learning a lot on react States, I also became aware of state management and different solution available. After reading a lot about React context, Redux, Jotai, Recoil any many other, I was really impressed by the simplicity and flexibility of [Zustand](https://github.com/pmndrs/zustand). I've included it in this release and invite you to have a look at the implementation I've made for my data stores. I'm really impressed on how you can structure your store, make use of Async calls and above all, slice your states so you can use only the bare minimum.
+While learning a lot on React states, I also became aware of state management and different solutions available. After reading a lot about React context, Redux, Jotai, Recoil any many other, I got really impressed by the simplicity and flexibility of [Zustand](https://github.com/pmndrs/zustand). I've included it in this release and invite you to have a look at the implementation I've made for my data stores. I really appreciate the flexibility on how you can structure your store, make use of Async calls and above all, slice your states so you can use only the bare minimum.
 
 ### Database
 
@@ -74,7 +74,7 @@ Having experienced the joy and pain of SQL database in the past made me really a
 
 ### Authentication
 
-I'm presently implementing OAuth for Google authentication, but it is not ready yet. It should be done before the end of June 2023.
+I'm presently exploring the implementation of OAuth for Google authentication either using Express session or Passport package. It is not ready yet, but should be done before the end of June 2023.
 
 ### UI
 
