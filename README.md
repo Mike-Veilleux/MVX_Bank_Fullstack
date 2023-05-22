@@ -47,7 +47,7 @@ Run project
 npm run dev
 ```
 
-**DATABASE**
+## Database
 
 If you don't have [MongoDB & Compass](https://www.mongodb.com/docs/compass/master/install/) installed locally you will need to get that up and running. You can also run it from a [Docker](https://www.docker.com/products/docker-desktop/) container from the following terminal command:
 
@@ -55,7 +55,7 @@ If you don't have [MongoDB & Compass](https://www.mongodb.com/docs/compass/maste
 docker run -p 27017:27017 --name MVX_Bank -d mongo
 ```
 
-**.ENV FILES**
+## Environnement files
 
 Create a **.env.development** file at the root of the **server** folder for mapping the database port and connection string.
 
