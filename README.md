@@ -48,6 +48,7 @@ npm run dev
 ```
 
 **DATABASE**
+
 If you don't have [MongoDB & Compass](https://www.mongodb.com/docs/compass/master/install/) installed locally you will need to get that up and running. You can also run it from a [Docker](https://www.docker.com/products/docker-desktop/) container from the following terminal command:
 
 ```
