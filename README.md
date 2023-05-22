@@ -21,24 +21,46 @@ In this version, you will find:
 - Withdrawal
 - Transaction log
 
-## Tech Stack
+# Technology Stack
 
-| Target | Package                 | Version |
-| :----- | :---------------------- | :-----: |
-| Client | React                   | 18.2.0  |
-| Client | React-dom               | 18.2.0  |
-| Client | React-router-dom        | 18.2.0  |
-| Client | React-uuid              |  2.0.0  |
-| Client | React-bootstrap         |  2.7.4  |
-| Client | Bootstrap               |  5.2.3  |
-| Client | Axios                   |  1.4.0  |
-| Client | Date-fns                | 2.30.0  |
-| Client | Formik                  |  2.2.9  |
-| Client | Yup                     |  1.0.2  |
-| Client | Zustand                 |  4.3.8  |
-| Client | Simple-zustand-devtools |  1.1.0  |
+### Front-End
 
-## Features
+| Package                 | Version | Description                 |
+| :---------------------- | :-----: | :-------------------------- |
+| Axios                   |  1.4.0  | HTTP requests               |
+| Bootstrap               |  5.2.3  | UI component Style          |
+| Date-fns                | 2.30.0  | Date manipulation           |
+| Formik                  |  2.2.9  | Form validation             |
+| React                   | 18.2.0  | Front-end framework         |
+| React-bootstrap         |  2.7.4  | UI component Library        |
+| React-dom               | 18.2.0  | DOM management              |
+| React-router-dom        | 18.2.0  | Single page router          |
+| React-uuid              |  2.0.0  | Unique ID generator         |
+| Typescript              |  5.0.4  | Javascript support for Type |
+| Simple-zustand-devtools |  1.1.0  | State management tool       |
+| Yup                     |  1.0.2  | Data validation             |
+| Zustand                 |  4.3.8  | State management            |
+
+### Back-End Stack
+
+| Package      | Version | Description                     |
+| :----------- | :-----: | :------------------------------ |
+| Concurrently |  7.6.0  | Runtime library                 |
+| Cors         |  2.8.5  | Cross origin manager            |
+| Dotenv       | 16.0.3  | Environnement variables library |
+| Express      | 4.18.2  | Routing framework               |
+| Mongoose     |  6.8.2  | MongoDB framework               |
+| Node JS      | 18.2.0  | Back-end runtime                |
+| Nodemon      | 2.0.20  | Runtime library                 |
+| Typescript   |  5.0.4  | Javascript support for Type     |
+
+### Toolchain Stack
+
+| Package | Version | Description      |
+| :------ | :-----: | :--------------- |
+| Vite    |  4.3.8  | Back-end runtime |
+
+# Features
 
 ### State management
 
@@ -95,6 +117,6 @@ Create a **.env.development** file at the root of the **client** folder for mapp
 VITE_API_BASE_URL=http://localhost:1337
 ```
 
-## Licensing
+# Licensing
 
 This project is under MIT license.
