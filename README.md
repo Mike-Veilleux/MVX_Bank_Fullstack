@@ -6,7 +6,7 @@ Banking capstone project for my MIT xPro Fullstack course.
 
 ## Motivation
 
-This project is a recap of what I've learned throughout the last year in my MERN Fullstack course. I'm coming from a desktop/.NET background with zero knowledge of web development. I started with learning Javascript and slowly progressing to Typescript. Followed by HTML and CSS basics, moving on to React NodeJS and MongoDB. We covered some of the tech leader such as, Docker, OAuth, Firebase, Redis, Graphql Bootstrap, Formik, Yup and many more...
+This project is a recap of what I've learned throughout the last year in my MERN Fullstack course. I'm coming from a desktop/.NET background with zero knowledge of web development. I started with learning Javascript and slowly progressing to Typescript. Followed by HTML and CSS basics, moving on to React NodeJS and MongoDB. We covered some of the tech leader such as, Docker, OAuth, Firebase, Redis, Graphql, Bootstrap, Formik, Yup and many more...
 
 ## Description
 
@@ -25,15 +25,15 @@ In this version, you will find:
 
 ### State management
 
-While learning a lot on react States, I also became aware of state management and different solution available. After reading a lot about React context, Redux, Jotai, Recoil any many other, I was really impressed by the simplicity and flexibility of Zustand. I included the latest in this release and invite you to have a look at the implementation I've made for my data stores. I'm really impressed on how you can structure your store, make use of Async calls and above all, slice your states so you can use only the bare minimum.
+While learning a lot on react States, I also became aware of state management and different solution available. After reading a lot about React context, Redux, Jotai, Recoil any many other, I was really impressed by the simplicity and flexibility of [Zustand](https://github.com/pmndrs/zustand). I've included it in this release and invite you to have a look at the implementation I've made for my data stores. I'm really impressed on how you can structure your store, make use of Async calls and above all, slice your states so you can use only the bare minimum.
 
 ### Database
 
-Having experienced the joy and pain of SQL database in the past made me really appreciate the ease of use of the new generation of NoSQL solution such as MongoDB. I've spent a lot of extra time getting acquainted with the inner workings of it. Mongoose npm package was a real joy to use since you can create a relational system on top of Mongo Document base nature, which I believe is a winning combination. I this release, you will also notice that I'm using a lot of database functions such as modifying the account balance and pushing new item to array directly from Mongo. This is helping reduce request traffic and minimize data concurrency.
+Having experienced the joy and pain of SQL database in the past made me really appreciate the ease of use of the new generation of NoSQL solution such as [MongoDB](https://www.mongodb.com/). I've spent a lot of extra time getting acquainted with the inner workings of it. [Mongoose](https://mongoosejs.com/) npm package was a real joy to use since you can create a relational system on top of Mongo Documents, which I believe is a winning combination. I this release, you will also notice that I'm using a lot of database functions such as modifying the account balance and pushing new items to array directly from Mongo. This is helping reduce request traffic and minimize data concurrency.
 
 ## Install
 
-Clone or download this repo, go to the root folder of booth **CLIENT** and **SERVER** and run the following commands from a terminal window for each one of them - All dependencies are in their respective package.json
+Clone or download this repo, go to the root folder of both **client** and **server** and run the following commands from a terminal window for each one of them - All dependencies are in their respective package.json
 
 Install dependencies
 
