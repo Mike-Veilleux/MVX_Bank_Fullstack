@@ -21,6 +21,8 @@ In this version, you will find:
 - Withdrawal
 - Transaction log
 
+<img src="https://github.com/Mike-Veilleux/MVX_Bank_Fullstack/blob/main/screenshots/mvx_bank_allshots.png">
+
 # Technology Stack
 
 ### Front-End
@@ -41,7 +43,7 @@ In this version, you will find:
 | Yup                     |  1.0.2  | Data validation             |
 | Zustand                 |  4.3.8  | State management            |
 
-### Back-End Stack
+### Back-End
 
 | Package      | Version | Description                     |
 | :----------- | :-----: | :------------------------------ |
