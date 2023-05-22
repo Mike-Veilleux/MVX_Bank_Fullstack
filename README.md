@@ -4,13 +4,9 @@
 
 Banking capstone project for my MIT xPro Fullstack course.
 
----
-
 ## Motivation
 
 This project is a recap of what I've learned throughout the last year in my MERN Fullstack course. I'm coming from a desktop/.NET background with zero knowledge of web development. I started with learning Javascript and slowly progressing to Typescript. Followed by HTML and CSS basics, moving on to React NodeJS and MongoDB. We covered some of the tech leader such as, Docker, OAuth, Firebase, Redis, Graphql, Bootstrap, Formik, Yup and many more...
-
----
 
 ## Description
 
@@ -24,8 +20,6 @@ In this version, you will find:
 - Deposit
 - Withdrawal
 - Transaction log
-
----
 
 ## Features
 
