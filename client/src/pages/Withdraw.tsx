@@ -41,26 +41,30 @@ const Withdraw = () => {
   const formik = useFormik({
     initialValues: initialFormValue,
     onSubmit: async (values, { resetForm }) => {
-      let updatedAccount: IAccount = await account_API.UpdateBalance(
-        user?._id!,
-        -values.amount!
-      );
-
-      if (updatedAccount !== undefined) {
-        const newTransaction = CreateTransaction(
-          user?.name,
-          ETransactionType.WITHDRAW,
-          -values.amount!,
-          new Date(Date.now())
+      if (values.amount! > account?.balance!) {
+        setShowOverdraftAlert(true);
+      } else {
+        let updatedAccount: IAccount = await account_API.UpdateBalance(
+          user?._id!,
+          -values.amount!
         );
-        updatedAccount = await account_API.AddTransactionToAccount(
-          updatedAccount._id!,
-          newTransaction
-        );
-        account_ACTIONS.setActiveAccount(updatedAccount);
 
-        setShowToast(true);
-        resetForm({ values: initialFormValue });
+        if (updatedAccount !== undefined) {
+          const newTransaction = CreateTransaction(
+            user?.name,
+            ETransactionType.WITHDRAW,
+            -values.amount!,
+            new Date(Date.now())
+          );
+          updatedAccount = await account_API.AddTransactionToAccount(
+            updatedAccount._id!,
+            newTransaction
+          );
+          account_ACTIONS.setActiveAccount(updatedAccount);
+
+          setShowToast(true);
+          resetForm({ values: initialFormValue });
+        }
       }
     },
     validationSchema: transactionAmountSchema,
@@ -109,9 +113,9 @@ const Withdraw = () => {
             new Date(account?.history![account?.history!.length - 1].date!),
             "EE dd MMMM yyyy HH:mm:ss"
           )}
-          body={`Successfully withdrawn ${
-            account?.history![account?.history!.length - 1].amount
-          }$ from ${user?.name}'s account!`}
+          body={`Successfully withdrawn ${Math.abs(
+            account?.history![account?.history!.length - 1].amount!
+          )}$ from ${user?.name}'s account!`}
           color={"success"}
         />
       )}

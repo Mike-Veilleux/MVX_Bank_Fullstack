@@ -7,8 +7,9 @@ routerUser.post("/get-by-email", async (req: Request, res: Response) => {
   const email = req.body.email;
   const user = await User.find({ email: email });
 
-  if (user === null) {
-    res.status(204);
+  if (user === null || user.length == 0) {
+    res.status(204).send();
+    console.log(`${email} not found!`);
   } else {
     console.log(user);
     res.status(200).send(user);
@@ -21,9 +22,9 @@ routerUser.post("/login", async (req: Request, res: Response) => {
   const user = await User.findOne({ email: email, password: password });
 
   if (user === null) {
-    res.status(204);
+    res.status(204).send();
   } else {
-    console.log(user);
+    // console.log(user);
     res.status(200).send(user);
   }
 });
@@ -35,7 +36,7 @@ routerUser.post("/new", async (req: Request, res: Response) => {
     const result = new User(newUser);
     result.save((err, newUser) => {
       if (err) return console.log(err);
-      console.log(newUser);
+      //  console.log(newUser);
       res.status(201).send(newUser);
     });
   } else {

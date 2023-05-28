@@ -48,11 +48,12 @@ export const useUserStore = create<userStore>((set, get) => ({
         set((state) => ({ user: data }));
         return true;
       } else {
+        console.log("Store, User does not exist");
         return false;
       }
     },
     FetchUserByEmail: async (_userEmail) => {
-      let data: IUser | undefined;
+      let data: IUser[] | undefined;
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/user/get-by-email`,
@@ -63,7 +64,10 @@ export const useUserStore = create<userStore>((set, get) => ({
       });
       data = response.data;
       if (response.status == 200) {
-        set((state) => ({ user: data }));
+        useAccountStore
+          .getState()
+          .API.FetchAccount(data![0]._id!, IAccountType.SAVINGS);
+        set((state) => ({ user: data![0] }));
         return true;
       } else {
         return false;
