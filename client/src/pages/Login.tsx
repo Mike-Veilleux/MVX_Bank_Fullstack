@@ -3,6 +3,7 @@ import { Fragment, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { ILoginValidation } from "../interfaces/ILoginValidation";
+import GoogleLogin from "../oAuth/GoogleLogin";
 import { useAccount_API } from "../stores/useAccountsStore";
 import { useUser, useUser_ACTIONS, useUser_API } from "../stores/useUserStore";
 import { loginAccountSchema } from "../validation/YupValidationSchemas";
@@ -50,6 +51,28 @@ const Login = () => {
             Login into your account to access our services.
           </Card.Text>
           <Form onSubmit={formik.handleSubmit}>
+            <hr />
+            <div
+              style={{
+                marginTop: "16px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                alignItems: "center",
+                flexGrow: 0,
+              }}
+            >
+              <div>
+                {" "}
+                <strong>Google Login</strong>
+              </div>
+              <GoogleLogin />
+            </div>
+            <hr />
+            <div style={{ textAlign: "center", marginBottom: "8px" }}>
+              <strong>MVX Bank Login</strong>
+            </div>
+
             <InputEmail formik={formik} objectName={"email"} label={"Email"} />
             <InputPassword
               formik={formik}
