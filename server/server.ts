@@ -6,12 +6,11 @@ import http from "http";
 //import jwtDecode from "jwt-decode";
 import mongoose from "mongoose";
 import { routerAccount } from "./routers/routerAccount";
+import { routerMailNotifications } from "./routers/routerMailNotifications";
 import { routerPing } from "./routers/routerPing";
 import { routerUser } from "./routers/routerUser";
 
-const CLIENT_ID =
-  "309903823130-rgc51vbl3po1e753h78lhqkhrkc4h6dp.apps.googleusercontent.com";
-
+const CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID;
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 const app = express();
 app.use(express.json({ limit: "50mb" }));
@@ -26,6 +25,7 @@ app.use(
 app.use("/ping", routerPing);
 app.use("/user", routerUser);
 app.use("/account", routerAccount);
+app.use("/notification", routerMailNotifications);
 
 const httpServer = http.createServer(app);
 
@@ -39,9 +39,6 @@ db.once("open", () => console.log(`Connected to MongoDB`));
 app.post("/token", async (req, res) => {
   const client = new OAuth2Client(CLIENT_ID);
   const token = req.headers.authorization?.split(" ").at(-1);
-
-  //console.log(jwtDecode(token!).email);
-  //console.log(token);
   console.log("start Check");
   const ticket = await client.verifyIdToken({
     idToken: token!,

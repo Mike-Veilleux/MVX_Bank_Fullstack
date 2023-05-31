@@ -15,7 +15,10 @@ export type accountStore = {
   };
   API: {
     AddNewAccount: (_account: IAccount | undefined) => void;
-    FetchAccount: (_userID: string, _AccountType: IAccountType) => void;
+    FetchAccount: (
+      _userID: string,
+      _AccountType: IAccountType
+    ) => Promise<IAccount>;
     UpdateBalance: (_id: string, _amount: number) => Promise<IAccount>;
     AddTransactionToAccount: (
       _accountID: string,
@@ -81,6 +84,7 @@ export const useAccountStore = create<accountStore>((set, get) => ({
       });
       data = response.data;
       set((state) => ({ account: data }));
+      return data;
     },
     UpdateBalance: async (_id, _amount) => {
       let data: IAccount | undefined;

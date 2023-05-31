@@ -3,7 +3,12 @@ import { Fragment, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { CreateUser, IUser } from "../interfaces/IUser";
 import { useAccount_API } from "../stores/useAccountsStore";
-import { useUser, useUser_API } from "../stores/useUserStore";
+import {
+  useNewUser,
+  useUser,
+  useUser_ACTIONS,
+  useUser_API,
+} from "../stores/useUserStore";
 import { nameof } from "../uitls/nameof";
 import { createAccountSchema } from "../validation/YupValidationSchemas";
 import {
@@ -15,6 +20,8 @@ import MvxToasts from "./components/MvxToasts";
 
 const CreateNewUser = () => {
   const user = useUser();
+  const newUser = useNewUser();
+  const user_ACTIONS = useUser_ACTIONS();
   const user_API = useUser_API();
   const account_API = useAccount_API();
 
@@ -24,9 +31,16 @@ const CreateNewUser = () => {
   const [isFirstUserCreated, setIsFirstUserCreated] = useState(true);
 
   const initialFormValues: IUser = {
+    name: newUser?.name != undefined ? newUser.name : "",
+    email: newUser?.email != undefined ? newUser.email : "",
+    password: newUser?.password != undefined ? newUser.password : "",
+    googleID: newUser?.googleID != undefined ? newUser.googleID : "",
+  };
+  const emptyFormValues: IUser = {
     name: "",
     email: "",
     password: "",
+    googleID: "",
   };
 
   const formik = useFormik({
@@ -35,24 +49,22 @@ const CreateNewUser = () => {
       let newUser: IUser = CreateUser(
         values.name,
         values.email,
-        values.password
+        values.password,
+        values.googleID
       );
       const isNewAccount = await user_API.CreateNewUser(newUser);
-      console.log(
-        "🚀 ~ file: CreateUser.tsx:41 ~ onSubmit: ~ isNewAccount:",
-        isNewAccount
-      );
       if (isNewAccount) {
         setIsFirstUserCreated(false);
         setShowSuccessAlert(true);
-        resetForm({ values: initialFormValues });
+        user_ACTIONS.setNewUser(undefined);
+        resetForm({ values: emptyFormValues });
       } else {
         setShowEmailExistAlert(true);
       }
     },
     validationSchema: createAccountSchema,
   });
-  const userAsType: IUser = CreateUser("", "", "");
+  const userAsType: IUser = CreateUser("", "", "", "");
   return (
     <Fragment>
       <Card className="shadow" style={{ width: "24em" }}>

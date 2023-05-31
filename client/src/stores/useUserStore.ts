@@ -8,22 +8,31 @@ import { useAccountStore } from "./useAccountsStore";
 
 export type userStore = {
   user: IUser | undefined;
-  ACTIONS: { setActiveUser: (_user: IUser | undefined) => void };
+  newUser: IUser | undefined;
+  ACTIONS: {
+    setActiveUser: (_user: IUser | undefined) => void;
+    setNewUser: (_user: IUser | undefined) => void;
+  };
   API: {
     CreateNewUser: (_newUser: IUser) => Promise<boolean>;
-    FetchUserByEmail: (_userEmail: string) => Promise<boolean>;
+    FetchUserByEmail: (_userEmail: string) => Promise<IUser>;
     SubmitLogin: (
       _userEmail: string,
       _userPassword: string
     ) => Promise<boolean>;
+    MailMessage: (_recipient: string, _message: string) => void;
   };
 };
 
 export const useUserStore = create<userStore>((set, get) => ({
   user: undefined,
+  newUser: undefined,
   ACTIONS: {
     setActiveUser(_user) {
       set((state) => ({ user: _user }));
+    },
+    setNewUser(_user) {
+      set((state) => ({ newUser: _user }));
     },
   },
   API: {
@@ -38,7 +47,6 @@ export const useUserStore = create<userStore>((set, get) => ({
         },
       });
       data = response.data;
-      console.log(data);
       // 201 = HTTP statuscode: Resource created
       if (response.status == 201) {
         const account_API = useAccountStore.getState().API;
@@ -48,12 +56,11 @@ export const useUserStore = create<userStore>((set, get) => ({
         set((state) => ({ user: data }));
         return true;
       } else {
-        console.log("Store, User does not exist");
         return false;
       }
     },
     FetchUserByEmail: async (_userEmail) => {
-      let data: IUser[] | undefined;
+      let data: IUser | undefined;
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/user/get-by-email`,
@@ -62,15 +69,16 @@ export const useUserStore = create<userStore>((set, get) => ({
           email: _userEmail,
         },
       });
-      data = response.data;
+      data = response.data[0];
       if (response.status == 200) {
-        useAccountStore
-          .getState()
-          .API.FetchAccount(data![0]._id!, IAccountType.SAVINGS);
-        set((state) => ({ user: data![0] }));
-        return true;
+        // const acc = await useAccountStore
+        //   .getState()
+        //   .API.FetchAccount(data!._id!, IAccountType.SAVINGS);
+
+        // set((state) => ({ user: data! }));
+        return data!;
       } else {
-        return false;
+        return {};
       }
     },
     SubmitLogin: async (_userEmail, _userPassword) => {
@@ -94,10 +102,22 @@ export const useUserStore = create<userStore>((set, get) => ({
         return false;
       }
     },
+    MailMessage: async (_recipient, _message) => {
+      axios({
+        method: "POST",
+        url: `${import.meta.env.VITE_API_BASE_URL}/notification/sendMail`,
+        // withCredentials: true,
+        data: {
+          recipient_email: _recipient,
+          message: _message,
+        },
+      });
+    },
   },
 }));
 
 export const useUser = () => useUserStore((state) => state.user);
+export const useNewUser = () => useUserStore((state) => state.newUser);
 export const useUser_ACTIONS = () => useUserStore((state) => state.ACTIONS);
 
 export const useUser_API = () => useUserStore((state) => state.API);
