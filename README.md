@@ -75,7 +75,7 @@ Having experienced the joy and pain of SQL database in the past made me really a
 
 ### SMTP mail service
 
-I've implemented [Nodemailer](https://www.npmjs.com/package/nodemailer) for diverse notifications purpose. In the future I will implement password reset functionality and may new's update mailing...
+I've implemented [Nodemailer](https://www.npmjs.com/package/nodemailer) for diverse notifications purpose. In the future I will implement password reset functionality and maybe news update.
 
 ### Authentication
 
