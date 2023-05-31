@@ -54,6 +54,7 @@ In this version, you will find:
 | Mongoose     |  6.8.2  | MongoDB framework             |
 | Node JS      | 18.2.0  | Back-end runtime              |
 | Nodemon      | 2.0.20  | Runtime library               |
+| Nodemailer   |  6.9.3  | SMTP mailing library          |
 | Typescript   |  5.0.4  | Javascript support for Type   |
 
 ### Toolchain Stack
@@ -72,9 +73,13 @@ While learning a lot on React states, I also became aware of state management an
 
 Having experienced the joy and pain of SQL database in the past made me really appreciate the ease of use of the new generation of NoSQL solution such as [MongoDB](https://www.mongodb.com/). I've spent a lot of extra time getting acquainted with the inner workings of it. [Mongoose](https://mongoosejs.com/) npm package was a real joy to use since you can create a relational system on top of Mongo Documents, which I believe is a winning combination. I this release, you will also notice that I'm using a lot of database functions such as modifying the account balance and pushing new items to array directly from Mongo. This is helping reduce request traffic and minimize data concurrency.
 
+### SMTP mail service
+
+I've implemented [Nodemailer](https://www.npmjs.com/package/nodemailer) for diverse notifications purpose. In the future I will implement password reset functionality and may new's update mailing...
+
 ### Authentication
 
-I'm presently exploring the implementation of OAuth for Google authentication either using Express session or Passport package. It is not ready yet, but should be done before the end of June 2023.
+I've implemented authentication for login with Google account. I'm planning to implement other such as Github and facebook.
 
 ### UI
 
@@ -110,13 +115,16 @@ Create a **.env.development** file at the root of the **server** folder for mapp
 
 ```
 PORT=1337
-DB_CONNECTION_STRING=mongodb://localhost:27017/MVX_Bank
+DB_CONNECTION_STRING="mongodb://localhost:27017/MVX_Bank"
+GMAIL_SMTP_USER="your_app_gmail"
+GMAIL_SMTP_PASSWORD="your_gmail_app_password"
 ```
 
 Create a **.env.development** file at the root of the **client** folder for mapping the nodeJS API base url for Axios.
 
 ```
-VITE_API_BASE_URL=http://localhost:1337
+VITE_API_BASE_URL="http://localhost:1337"
+VITE_GOOGLE_API_CLIENT_ID="your_google_app_id"
 ```
 
 # Licensing
