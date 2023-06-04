@@ -93,6 +93,7 @@ export const useUserStore = create<userStore>((set, get) => ({
         },
       });
       data = response.data;
+      console.log(response.headers.coo);
       if (response.status == 200) {
         const account_API = useAccountStore.getState().API;
         account_API.FetchAccount(data!._id!, IAccountType.SAVINGS);

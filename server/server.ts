@@ -1,8 +1,9 @@
 import cors from "cors";
 import dotenv from "dotenv";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
 import http from "http";
+import jwt from "jsonwebtoken";
 //import jwtDecode from "jwt-decode";
 import mongoose from "mongoose";
 import { routerAccount } from "./routers/routerAccount";
@@ -12,7 +13,7 @@ import { routerUser } from "./routers/routerUser";
 
 const CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID;
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
-const app = express();
+export const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(
@@ -35,6 +36,19 @@ mongoose.connect(process.env.DB_CONNECTION_STRING!);
 const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log(`Connected to MongoDB`));
+
+function CheckJWT(req: Request, res: Response, next: NextFunction) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.SESSION_TOKEN_SECRET!, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    console.log("Token verified");
+    next();
+  });
+}
 
 app.post("/token", async (req, res) => {
   const client = new OAuth2Client(CLIENT_ID);
