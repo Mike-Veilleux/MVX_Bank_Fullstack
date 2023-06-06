@@ -1,6 +1,7 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import LoginButton from "../../oAuth/LoginButton";
 import { useUser } from "../../stores/useUserStore";
+import SignUpButton from "../components/SignUpButton";
 
 const NavigationBar = () => {
   const user = useUser();
@@ -70,7 +71,7 @@ const NavigationBar = () => {
             )}
           </Nav>
         </Navbar.Collapse>
-        {/* {user == undefined && <SignUpButton />} */}
+        {user == undefined && <SignUpButton />}
         <LoginButton />
       </Container>
     </Navbar>

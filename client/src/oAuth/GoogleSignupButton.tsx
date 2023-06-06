@@ -1,7 +1,6 @@
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IAccountType } from "../interfaces/ENUMS";
 import { GoogleAccount } from "../interfaces/GoogleAccount";
 import { IUser } from "../interfaces/IUser";
 import { useAccount_API } from "../stores/useAccountsStore";
@@ -11,7 +10,7 @@ import {
   useUser_ACTIONS,
   useUser_API,
 } from "../stores/useUserStore";
-const GoogleLogin = () => {
+const GoogleSignupButton = () => {
   const user = useUser();
   const newUser = useNewUser();
   const user_ACTIONS = useUser_ACTIONS();
@@ -26,33 +25,51 @@ const GoogleLogin = () => {
     const jwtToken = response.credential;
     const userData: GoogleAccount = jwtDecode(jwtToken);
 
-    const isExistingUser: IUser = await user_API.FetchUserByEmail(
-      userData!.email
+    const isUserExisting: boolean = await user_API.AuthenticateGoogleUser(
+      userData.email,
+      userData.sub
     );
-    setLoading(false);
-    if (Object.keys(isExistingUser).length === 0) {
-      user_ACTIONS.setNewUser({
+
+    if (isUserExisting) {
+      navigate("/home");
+    } else {
+      const newUser: IUser = {
         name: userData.name,
         email: userData.email,
         password: "",
         googleID: userData.sub,
-      });
-
-      navigate("/create-account");
-    } else {
-      if (
-        isExistingUser.googleID === "" ||
-        isExistingUser?.googleID === undefined
-      ) {
-        alert(
-          `This email is linked to an existing MVX account, Try log in with "MVX Bank Login" method!`
-        );
-      } else {
-        user_ACTIONS.setActiveUser(isExistingUser);
-        account_API.FetchAccount(isExistingUser._id!, IAccountType.SAVINGS);
-        navigate("/home");
-      }
+      };
+      await user_API.CreateNewUser(newUser);
+      navigate("/home");
     }
+
+    // const isExistingUser: IUser = await user_API.FetchUserByEmail(
+    //   userData!.email
+    // );
+    // setLoading(false);
+    // if (Object.keys(isExistingUser).length === 0) {
+    //   user_ACTIONS.setNewUser({
+    //     name: userData.name,
+    //     email: userData.email,
+    //     password: "",
+    //     googleID: userData.sub,
+    //   });
+
+    // //   navigate("/create-account");
+    // } else {
+    //   if (
+    //     isExistingUser.googleID === "" ||
+    //     isExistingUser?.googleID === undefined
+    //   ) {
+    //     alert(
+    //       `This email is linked to an existing MVX account, Try log in with "MVX Bank Login" method!`
+    //     );
+    //   } else {
+    //     user_ACTIONS.setActiveUser(isExistingUser);
+    //     account_API.FetchAccount(isExistingUser._id!, IAccountType.SAVINGS);
+    //     navigate("/home");
+    //   }
+    // }
     // user_API.MailMessage(
     //   userData.email,
     //   `Hi ${userData.given_name}, You just login MVX Bank!`
@@ -63,7 +80,7 @@ const GoogleLogin = () => {
     /* global google */
     google.accounts.id.initialize({
       client_id: import.meta.env.VITE_GOOGLE_API_CLIENT_ID,
-      context: "signin",
+      context: "signup",
       callback: handleCallbackResponse,
     });
     const googleDiv = document.getElementById("signInDiv");
@@ -73,7 +90,7 @@ const GoogleLogin = () => {
       size: "large",
       width: "350px",
       logo_alignment: "center",
-      text: "signin_with",
+      text: "signup_with",
       locale: "en",
     });
   }, []);
@@ -97,4 +114,4 @@ const GoogleLogin = () => {
   );
 };
 
-export default GoogleLogin;
+export default GoogleSignupButton;

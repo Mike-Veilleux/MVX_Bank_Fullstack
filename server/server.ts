@@ -1,11 +1,12 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
 import http from "http";
-import jwt from "jsonwebtoken";
 //import jwtDecode from "jwt-decode";
 import mongoose from "mongoose";
+import { CheckJWT } from "./middleware/CheckJWT";
 import { routerAccount } from "./routers/routerAccount";
 import { routerMailNotifications } from "./routers/routerMailNotifications";
 import { routerPing } from "./routers/routerPing";
@@ -14,6 +15,17 @@ import { routerUser } from "./routers/routerUser";
 const CLIENT_ID = process.env.GOOGLE_API_CLIENT_ID;
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 export const app = express();
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", req.header("origin"));
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
+app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(
@@ -26,7 +38,7 @@ app.use(
 app.use("/ping", routerPing);
 app.use("/user", routerUser);
 app.use("/account", CheckJWT, routerAccount);
-app.use("/notification", routerMailNotifications);
+app.use("/notification", CheckJWT, routerMailNotifications);
 
 const httpServer = http.createServer(app);
 
@@ -36,19 +48,6 @@ mongoose.connect(process.env.DB_CONNECTION_STRING!);
 const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log(`Connected to MongoDB`));
-
-function CheckJWT(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.SESSION_TOKEN_SECRET!, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    console.log("Token verified");
-    next();
-  });
-}
 
 app.post("/token", async (req, res) => {
   const client = new OAuth2Client(CLIENT_ID);

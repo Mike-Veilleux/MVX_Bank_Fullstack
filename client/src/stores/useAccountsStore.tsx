@@ -63,7 +63,7 @@ export const useAccountStore = create<accountStore>((set, get) => ({
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/account/new`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           account: _account,
         },
@@ -76,7 +76,7 @@ export const useAccountStore = create<accountStore>((set, get) => ({
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/account/get-by-id`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           id: _userID,
           accountType: _accountType,

@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { Fragment, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { CreateUser, IUser } from "../interfaces/IUser";
+import GoogleSignupButton from "../oAuth/GoogleSignupButton";
 import { useAccount_API } from "../stores/useAccountsStore";
 import {
   useNewUser,
@@ -101,6 +102,9 @@ const CreateNewUser = () => {
             >
               {isFirstUserCreated ? "Create Account" : "Create Another Account"}
             </Button>
+            <div style={{ marginTop: "20px" }}>
+              <GoogleSignupButton />
+            </div>
           </Form>
         </Card.Body>
       </Card>

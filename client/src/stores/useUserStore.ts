@@ -15,6 +15,14 @@ export type userStore = {
   };
   API: {
     CreateNewUser: (_newUser: IUser) => Promise<boolean>;
+    AuthenticateLocalUser: (
+      _email: string,
+      _password: string
+    ) => Promise<boolean>;
+    AuthenticateGoogleUser: (
+      _email: string,
+      _googleID: string
+    ) => Promise<boolean>;
     FetchUserByEmail: (_userEmail: string) => Promise<IUser>;
     SubmitLogin: (
       _userEmail: string,
@@ -59,12 +67,58 @@ export const useUserStore = create<userStore>((set, get) => ({
         return false;
       }
     },
+    AuthenticateLocalUser: async (_email, _password) => {
+      let data: IUser | undefined;
+      const response = await axios({
+        method: "POST",
+        url: `${import.meta.env.VITE_API_BASE_URL}/user/auth-local`,
+        withCredentials: true,
+        data: {
+          email: _email,
+          password: _password,
+        },
+      });
+      console.log(response);
+      if (response.status === 204) {
+        // show no user found toast
+        return false;
+      } else {
+        data = response.data;
+        const account_API = useAccountStore.getState().API;
+        account_API.FetchAccount(data!._id!, IAccountType.SAVINGS);
+        set((state) => ({ user: data }));
+        return true;
+      }
+    },
+
+    AuthenticateGoogleUser: async (_email, _googleID) => {
+      let data: IUser | undefined;
+      const response = await axios({
+        method: "POST",
+        url: `${import.meta.env.VITE_API_BASE_URL}/user/auth-google`,
+        withCredentials: true,
+        data: {
+          email: _email,
+          googleID: _googleID,
+        },
+      });
+      if (response.status === 204) {
+        // show no user found toast
+        return false;
+      } else {
+        data = response.data;
+        const account_API = useAccountStore.getState().API;
+        account_API.FetchAccount(data!._id!, IAccountType.SAVINGS);
+        set((state) => ({ user: data }));
+        return true;
+      }
+    },
     FetchUserByEmail: async (_userEmail) => {
       let data: IUser | undefined;
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/user/get-by-email`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           email: _userEmail,
         },

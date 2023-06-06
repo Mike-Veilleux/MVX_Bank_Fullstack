@@ -26,7 +26,7 @@ const Login = () => {
   const formik = useFormik({
     initialValues: initialFormValues,
     onSubmit: async (values, { resetForm }) => {
-      const isValidLogin = await user_API.SubmitLogin(
+      const isValidLogin = await user_API.AuthenticateLocalUser(
         values.email!,
         values.password!
       );

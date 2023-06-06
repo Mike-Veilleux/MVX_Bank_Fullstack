@@ -7,6 +7,63 @@ dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 export const routerUser = express.Router();
 
+routerUser.post("/auth-local", async (req: Request, res: Response) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const user: IUser | null | undefined = await User.findOne({
+    email: email,
+    password: password,
+  });
+  if (user === undefined) {
+    res.status(204).send();
+  } else {
+    const userID = user!._id;
+    console.log(userID);
+    const token = jwt.sign(
+      { value: userID },
+      process.env.SESSION_TOKEN_SECRET!
+    );
+
+    res
+      .cookie("mvx_jwt", token, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
+      })
+      .send(user);
+  }
+});
+
+routerUser.post("/auth-google", async (req: Request, res: Response) => {
+  const email = req.body.email;
+  const googleID = req.body.googleID;
+  const user: IUser | null | undefined = await User.findOne({
+    email: email,
+    googleID: googleID,
+  });
+  console.log("DB User: ", user);
+  if (user === undefined || user === null) {
+    res.status(204).send();
+  } else {
+    const userID = user!._id;
+    console.log(userID);
+    const token = jwt.sign(
+      { value: userID },
+      process.env.SESSION_TOKEN_SECRET!
+    );
+
+    res
+      .cookie("mvx_jwt", token, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
+      })
+      .send(user);
+  }
+});
+
 routerUser.post("/get-by-email", async (req: Request, res: Response) => {
   const email = req.body.email;
   const user = await User.find({ email: email });
@@ -27,6 +84,7 @@ routerUser.post("/login", async (req: Request, res: Response) => {
     email: email,
     password: password,
   });
+
   console.log("User: ", user);
 
   if (user === null) {
@@ -42,6 +100,22 @@ routerUser.post("/login", async (req: Request, res: Response) => {
 
     res.status(200).send(user);
   }
+});
+
+routerUser.post("/logout", (req: Request, res: Response) => {
+  const token = jwt.sign(
+    { value: "Expired" },
+    process.env.SESSION_TOKEN_SECRET!
+  );
+  console.log("Logout Signed Token: ", token);
+  res
+    .cookie("mvx_jwt", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      maxAge: 0,
+    })
+    .send({});
 });
 
 routerUser.post("/new", async (req: Request, res: Response) => {
