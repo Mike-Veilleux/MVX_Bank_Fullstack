@@ -120,8 +120,8 @@ export const useUserStore = create<userStore>((set, get) => ({
 export const useUser = () => useUserStore((state) => state.user);
 export const useNewUser = () => useUserStore((state) => state.newUser);
 export const useUser_ACTIONS = () => useUserStore((state) => state.ACTIONS);
-
 export const useUser_API = () => useUserStore((state) => state.API);
+
 if (process.env.NODE_ENV === "development") {
   mountStoreDevtool("USER", useUserStore);
 }
