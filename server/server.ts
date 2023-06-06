@@ -25,7 +25,7 @@ app.use(
 
 app.use("/ping", routerPing);
 app.use("/user", routerUser);
-app.use("/account", routerAccount);
+app.use("/account", CheckJWT, routerAccount);
 app.use("/notification", routerMailNotifications);
 
 const httpServer = http.createServer(app);

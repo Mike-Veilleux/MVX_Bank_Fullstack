@@ -84,14 +84,14 @@ export const useAccountStore = create<accountStore>((set, get) => ({
       });
       data = response.data;
       set((state) => ({ account: data }));
-      return data;
+      return data!;
     },
     UpdateBalance: async (_id, _amount) => {
       let data: IAccount | undefined;
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/account/update-balance`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           id: _id,
           amount: _amount,
@@ -106,7 +106,7 @@ export const useAccountStore = create<accountStore>((set, get) => ({
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/account/add-transaction`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           id: _accountID,
           newTransaction: _newTransaction,

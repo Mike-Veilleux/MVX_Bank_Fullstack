@@ -52,10 +52,10 @@ const GoogleLogin = () => {
         navigate("/home");
       }
     }
-    user_API.MailMessage(
-      userData.email,
-      `Hi ${userData.given_name}, You just login MVX Bank!`
-    );
+    // user_API.MailMessage(
+    //   userData.email,
+    //   `Hi ${userData.given_name}, You just login MVX Bank!`
+    // );
   }
 
   useEffect(() => {
