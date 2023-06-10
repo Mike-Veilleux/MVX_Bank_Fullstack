@@ -13,6 +13,7 @@ import {
 import { useUser } from "../stores/useUserStore";
 import { nameof } from "../uitls/nameof";
 import { transactionAmountSchema } from "../validation/YupValidationSchemas";
+import { DropboxAccount } from "./components/MVXSelects";
 import { InputAmount } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
 
@@ -30,11 +31,6 @@ const Deposit = () => {
   );
 
   const [showToast, setShowToast] = useState<boolean>(false);
-  const [selectedAccountType, setSelectedAccountType] = useState<IAccount>();
-
-  function handleSelectAccount(e: any) {
-    setSelectedAccountType(e.target.value);
-  }
 
   const initialFormValue: ITransaction = {
     sort: ETransactionType.DEPOSIT,
@@ -47,6 +43,7 @@ const Deposit = () => {
     onSubmit: async (values, { resetForm }) => {
       let updatedAccount: IAccount = await account_API.UpdateBalance(
         user?._id!,
+
         values.amount!
       );
 
@@ -81,20 +78,13 @@ const Deposit = () => {
             Deposit money in your account.
           </Card.Text>
           <Form onSubmit={formik.handleSubmit}>
-            <Stack gap={1}>
+            <Stack gap={3}>
+              <DropboxAccount />
               <Stack direction="horizontal" gap={2}>
                 <div>Current Balance:</div>
                 <div style={{ fontWeight: "bold" }}>{account!.balance}$</div>
               </Stack>
-              {/* <select
-                className="form-select"
-                aria-label="Default select example"
-                // onChange={(e, val) => handleSelectAccount(val)}
-              >
-                <option selected>Select Account</option>
-                <option value="1">{IAccountType.SAVINGS}</option>
-                <option value="2">{IAccountType.CHECK}</option>
-              </select> */}
+
               <InputAmount
                 formik={formik}
                 objectName={nameof(transactionAsType, (x) => x.amount!)}
@@ -124,7 +114,7 @@ const Deposit = () => {
           )}
           body={`Successfully deposited ${
             account?.history![account?.history!.length - 1].amount
-          }$ in ${user?.name}'s account!`}
+          }$ in ${user?.name}'s ${account.accountType?.toLowerCase()} account!`}
           color={"success"}
         />
       )}

@@ -58,9 +58,17 @@ export const useUserStore = create<userStore>((set, get) => ({
       // 201 = HTTP statuscode: Resource created
       if (response.status == 201) {
         const account_API = useAccountStore.getState().API;
-        const newAccount = CreateNewAccount(IAccountType.SAVINGS, data?._id!);
-        account_API.AddNewAccount(newAccount);
-        account_API.FetchAccount(data!._id!, IAccountType.SAVINGS);
+        const newSavingAccount = CreateNewAccount(
+          IAccountType.SAVINGS,
+          data?._id!
+        );
+        const newCheckAccount = CreateNewAccount(
+          IAccountType.CHECK,
+          data?._id!
+        );
+        account_API.AddNewAccount(newSavingAccount);
+        account_API.AddNewAccount(newCheckAccount);
+        account_API.FetchAndSetActiveAccount(data!._id!, IAccountType.SAVINGS);
         set((state) => ({ user: data }));
         return true;
       } else {
@@ -85,7 +93,7 @@ export const useUserStore = create<userStore>((set, get) => ({
       } else {
         data = response.data;
         const account_API = useAccountStore.getState().API;
-        account_API.FetchAccount(data!._id!, IAccountType.SAVINGS);
+        account_API.FetchAndSetActiveAccount(data!._id!, IAccountType.SAVINGS);
         set((state) => ({ user: data }));
         return true;
       }
@@ -108,7 +116,7 @@ export const useUserStore = create<userStore>((set, get) => ({
       } else {
         data = response.data;
         const account_API = useAccountStore.getState().API;
-        account_API.FetchAccount(data!._id!, IAccountType.SAVINGS);
+        account_API.FetchAndSetActiveAccount(data!._id!, IAccountType.SAVINGS);
         set((state) => ({ user: data }));
         return true;
       }
@@ -150,7 +158,7 @@ export const useUserStore = create<userStore>((set, get) => ({
       console.log(response.headers.coo);
       if (response.status == 200) {
         const account_API = useAccountStore.getState().API;
-        account_API.FetchAccount(data!._id!, IAccountType.SAVINGS);
+        account_API.FetchAndSetActiveAccount(data!._id!, IAccountType.SAVINGS);
         set((state) => ({ user: data }));
         return true;
       } else {

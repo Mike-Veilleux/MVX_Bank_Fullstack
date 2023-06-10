@@ -13,6 +13,7 @@ import {
 import { useUser } from "../stores/useUserStore";
 import { nameof } from "../uitls/nameof";
 import { transactionAmountSchema } from "../validation/YupValidationSchemas";
+import { DropboxAccount } from "./components/MVXSelects";
 import { InputAmount } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
 
@@ -81,7 +82,8 @@ const Withdraw = () => {
             Withdraw money from your account.
           </Card.Text>
           <Form onSubmit={formik.handleSubmit}>
-            <Stack gap={1}>
+            <Stack gap={3}>
+              <DropboxAccount />
               <Stack direction="horizontal" gap={2}>
                 <div>Current Balance:</div>
                 <div style={{ fontWeight: "bold" }}>{account!.balance}$</div>
@@ -115,7 +117,9 @@ const Withdraw = () => {
           )}
           body={`Successfully withdrawn ${Math.abs(
             account?.history![account?.history!.length - 1].amount!
-          )}$ from ${user?.name}'s account!`}
+          )}$ from ${
+            user?.name
+          }'s ${account.accountType?.toLowerCase()} account!`}
           color={"success"}
         />
       )}

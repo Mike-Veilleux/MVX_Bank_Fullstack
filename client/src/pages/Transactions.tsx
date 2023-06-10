@@ -1,7 +1,8 @@
 import format from "date-fns/format";
-import { Container, Table } from "react-bootstrap";
+import { Container, Stack, Table } from "react-bootstrap";
 import { ITransaction } from "../interfaces/ITransaction";
 import { useAccount } from "../stores/useAccountsStore";
+import { DropboxAccount } from "./components/MVXSelects";
 
 const Transactions = () => {
   const account = useAccount();
@@ -16,6 +17,7 @@ const Transactions = () => {
       );
       return (
         <tr key={index}>
+          <td>{trans.userName}</td>
           <td>{trans.sort}</td>
           <td>{trans.amount}$</td>
           <td>{formattedDate}</td>
@@ -23,18 +25,23 @@ const Transactions = () => {
       );
     }
   );
+
   return (
     <Container>
-      <Table striped bordered hover>
-        <thead style={{ backgroundColor: "#303030", color: "#ebebeb" }}>
-          <tr>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>{renderTransactions}</tbody>
-      </Table>
+      <Stack gap={3}>
+        <DropboxAccount />
+        <Table striped bordered hover>
+          <thead style={{ backgroundColor: "#303030", color: "#ebebeb" }}>
+            <tr>
+              <th>User</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>{renderTransactions}</tbody>
+        </Table>
+      </Stack>
     </Container>
   );
 };

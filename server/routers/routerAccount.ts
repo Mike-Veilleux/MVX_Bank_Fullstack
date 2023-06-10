@@ -35,11 +35,13 @@ routerAccount.post("/new", async (req: Request, res: Response) => {
 
 routerAccount.post("/update-balance", async (req: Request, res: Response) => {
   const id = req.body.id;
+  const accountType = req.body.accountType;
   const amount = parseInt(req.body.amount);
 
   const account = await Account.findOneAndUpdate(
     {
       ownersID: id,
+      accountType: accountType,
     },
     { $inc: { balance: amount } },
     { new: true }

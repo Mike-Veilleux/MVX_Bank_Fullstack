@@ -6,16 +6,14 @@ import { IAccount } from "../interfaces/IAccount";
 import { ITransaction } from "../interfaces/ITransaction";
 
 export type accountStore = {
-  account: IAccount | undefined;
+  activeAccount: IAccount | undefined;
+  allAccounts: IAccount[] | undefined;
   ACTIONS: {
-    //addAccount: (_newAccount: IAccount) => void;
-    updateAccounts: (_newAccountData: IAccount) => void;
-    //loadAccountsFromLocalStorage: () => void;
     setActiveAccount: (_account: IAccount | undefined) => void;
   };
   API: {
     AddNewAccount: (_account: IAccount | undefined) => void;
-    FetchAccount: (
+    FetchAndSetActiveAccount: (
       _userID: string,
       _AccountType: IAccountType
     ) => Promise<IAccount>;
@@ -28,33 +26,11 @@ export type accountStore = {
 };
 
 export const useAccountStore = create<accountStore>((set, get) => ({
-  account: undefined,
+  activeAccount: undefined,
+  allAccounts: [],
   ACTIONS: {
-    // addAccount(_newAccount: IAccount) {
-    //   const existingAccounts = get().users!;
-    //   let newAccounts: IAccount[];
-    //   if (existingAccounts === null) {
-    //     newAccounts = [_newAccount];
-    //   } else {
-    //     newAccounts = [...existingAccounts, _newAccount];
-    //   }
-    //   localStorage.setItem(storageKey, JSON.stringify(newAccounts));
-    //   set((state) => ({ users: newAccounts }));
-    // },
-
     setActiveAccount(_account) {
-      set((state) => ({ account: _account }));
-    },
-    updateAccounts(_newAccountData) {
-      // const xAccounts = get().users;
-      // const indexAccount = xAccounts?.findIndex(
-      //   (account) => account._id === _newAccountData._id
-      // );
-      // if (indexAccount! >= 0) {
-      //   xAccounts?.splice(indexAccount!, 1, _newAccountData);
-      //   localStorage.setItem(storageKey, JSON.stringify(xAccounts));
-      //   set((state) => ({ users: xAccounts }));
-      // }
+      set((state) => ({ activeAccount: _account }));
     },
   },
   API: {
@@ -69,9 +45,9 @@ export const useAccountStore = create<accountStore>((set, get) => ({
         },
       });
       data = response.data;
-      set((state) => ({ account: data }));
+      set((state) => ({ activeAccount: data }));
     },
-    FetchAccount: async (_userID, _accountType) => {
+    FetchAndSetActiveAccount: async (_userID, _accountType) => {
       let data: IAccount | undefined;
       const response = await axios({
         method: "POST",
@@ -83,7 +59,7 @@ export const useAccountStore = create<accountStore>((set, get) => ({
         },
       });
       data = response.data;
-      set((state) => ({ account: data }));
+      set((state) => ({ activeAccount: data }));
       return data!;
     },
     UpdateBalance: async (_id, _amount) => {
@@ -94,11 +70,12 @@ export const useAccountStore = create<accountStore>((set, get) => ({
         withCredentials: true,
         data: {
           id: _id,
+          accountType: get().activeAccount?.accountType,
           amount: _amount,
         },
       });
       data = response.data;
-      set((state) => ({ account: data }));
+      set((state) => ({ activeAccount: data }));
       return data!;
     },
     AddTransactionToAccount: async (_accountID, _newTransaction) => {
@@ -113,13 +90,13 @@ export const useAccountStore = create<accountStore>((set, get) => ({
         },
       });
       data = response.data;
-      set((state) => ({ account: data }));
+      set((state) => ({ activeAccount: data }));
       return data!;
     },
   },
 }));
 
-export const useAccount = () => useAccountStore((state) => state.account);
+export const useAccount = () => useAccountStore((state) => state.activeAccount);
 export const useAccount_ACTIONS = () =>
   useAccountStore((state) => state.ACTIONS);
 

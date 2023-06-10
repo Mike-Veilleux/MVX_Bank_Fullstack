@@ -3,8 +3,7 @@ import { Fragment, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { ILoginValidation } from "../interfaces/ILoginValidation";
-import { useAccount_API } from "../stores/useAccountsStore";
-import { useUser, useUser_ACTIONS, useUser_API } from "../stores/useUserStore";
+import { useUser_API } from "../stores/useUserStore";
 import { loginAccountSchema } from "../validation/YupValidationSchemas";
 import { InputEmail, InputPassword } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
@@ -13,10 +12,7 @@ import GoogleLogin from "./components/oAuth/GoogleLogin";
 const Login = () => {
   const [showFailLoginAlert, setShowFailLoginAlert] = useState<boolean>(false);
   const navigate = useNavigate();
-  const user = useUser();
-  const user_ACTIONS = useUser_ACTIONS();
   const user_API = useUser_API();
-  const account_API = useAccount_API();
 
   const initialFormValues: ILoginValidation = {
     email: "",
@@ -64,7 +60,7 @@ const Login = () => {
             >
               <div>
                 {" "}
-                <strong>Google Login</strong>
+                <strong>Social Login</strong>
               </div>
               <GoogleLogin />
             </div>
