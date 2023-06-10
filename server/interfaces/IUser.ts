@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { Schema, model } from "mongoose";
 
 export interface IUser {
@@ -13,6 +14,14 @@ export const userSchema = new Schema<IUser>({
   email: { type: String },
   password: { type: String },
   googleID: { type: String },
+});
+
+userSchema.pre("save", async function (next) {
+  if (this.googleID === "") {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password!, salt);
+  }
+  next();
 });
 
 export const User = model("User", userSchema);

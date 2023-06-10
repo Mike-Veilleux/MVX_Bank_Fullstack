@@ -4,10 +4,7 @@ import jwt from "jsonwebtoken";
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 export function CheckJWT(req: Request, res: Response, next: NextFunction) {
-  console.log("Entering CheckJWT...");
   const token = req.cookies.mvx_jwt;
-  console.log("Encoded Token: ", token);
-  console.log("Raw Cookie: ", req.cookies);
   if (token == null) {
     res.status(401);
   } else {
@@ -16,9 +13,8 @@ export function CheckJWT(req: Request, res: Response, next: NextFunction) {
       process.env.SESSION_TOKEN_SECRET!,
       (err: any, result: any) => {
         if (err) return res.sendStatus(403);
+        //@ts-ignore
         req.user = result.value;
-        console.log("Decoded token:", result);
-        console.log("Token is valid!");
       }
     );
   }

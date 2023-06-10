@@ -27,13 +27,6 @@ const RestrictedAccessMsg = () => {
         >
           Login
         </Button>
-        <Button
-          variant="danger"
-          style={{ width: "100%" }}
-          onClick={() => navigate("/all-data")}
-        >
-          Use Someone Else's Account
-        </Button>
       </Stack>
     </Alert>
   );

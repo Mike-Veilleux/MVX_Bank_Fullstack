@@ -2,7 +2,6 @@ import { useFormik } from "formik";
 import { Fragment, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { CreateUser, IUser } from "../interfaces/IUser";
-import GoogleSignupButton from "../oAuth/GoogleSignupButton";
 import { useAccount_API } from "../stores/useAccountsStore";
 import {
   useNewUser,
@@ -18,6 +17,7 @@ import {
   InputUserName,
 } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
+import GoogleSignupButton from "./components/oAuth/GoogleSignupButton";
 
 const CreateNewUser = () => {
   const user = useUser();

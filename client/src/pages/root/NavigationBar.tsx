@@ -1,6 +1,6 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import LoginButton from "../../oAuth/LoginButton";
 import { useUser } from "../../stores/useUserStore";
+import LoginButton from "../components/LoginButton";
 import SignUpButton from "../components/SignUpButton";
 
 const NavigationBar = () => {

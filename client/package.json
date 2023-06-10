@@ -10,8 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.1.0",
-    "@types/google.accounts": "^0.0.7",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "date-fns": "^2.30.0",
@@ -27,6 +25,8 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "@auth0/auth0-react": "^2.1.0",
+    "@types/google.accounts": "^0.0.7",
     "@types/history": "^5.0.0",
     "@types/node": "^20.2.0",
     "@types/react": "^18.0.28",

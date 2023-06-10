@@ -3,12 +3,12 @@ import { Fragment, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { ILoginValidation } from "../interfaces/ILoginValidation";
-import GoogleLogin from "../oAuth/GoogleLogin";
 import { useAccount_API } from "../stores/useAccountsStore";
 import { useUser, useUser_ACTIONS, useUser_API } from "../stores/useUserStore";
 import { loginAccountSchema } from "../validation/YupValidationSchemas";
 import { InputEmail, InputPassword } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
+import GoogleLogin from "./components/oAuth/GoogleLogin";
 
 const Login = () => {
   const [showFailLoginAlert, setShowFailLoginAlert] = useState<boolean>(false);
