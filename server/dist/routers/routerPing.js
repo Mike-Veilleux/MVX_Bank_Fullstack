@@ -7,5 +7,5 @@ exports.routerPing = void 0;
 const express_1 = __importDefault(require("express"));
 exports.routerPing = express_1.default.Router();
 exports.routerPing.get("/", (req, res) => {
-    res.send('<h1 style="text-align:center">You pinged me?</h1>');
+    res.send(`<h1 style="text-align:center">You pinged me? ${process.env.PORT}</h1>`);
 });
