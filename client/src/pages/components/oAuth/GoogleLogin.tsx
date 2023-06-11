@@ -1,8 +1,8 @@
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IUserType } from "../../../interfaces/ENUMS";
 import { GoogleAccount } from "../../../interfaces/GoogleAccount";
-import { IUser } from "../../../interfaces/IUser";
 import { useUser_ACTIONS, useUser_API } from "../../../stores/useUserStore";
 const GoogleLogin = () => {
   const user_ACTIONS = useUser_ACTIONS();
@@ -16,11 +16,11 @@ const GoogleLogin = () => {
     const jwtToken = response.credential;
     const userData: GoogleAccount = jwtDecode(jwtToken);
 
-    const isExistingUser: IUser = await user_API.FetchUserByEmail(
+    const isExistingUser: IUserType | null = await user_API.CheckExistingUser(
       userData!.email
     );
     setLoading(false);
-    if (Object.keys(isExistingUser).length === 0) {
+    if (isExistingUser === IUserType.NONE) {
       user_ACTIONS.setNewUser({
         name: userData.name,
         email: userData.email,
@@ -30,18 +30,12 @@ const GoogleLogin = () => {
 
       navigate("/create-account");
     } else {
-      if (
-        isExistingUser.googleID === "" ||
-        isExistingUser?.googleID === undefined
-      ) {
+      if (isExistingUser !== IUserType.GOOGLE) {
         alert(
           `This email is linked to an existing MVX account, Try log in with "MVX Bank Login" method!`
         );
       } else {
-        const isUserExisting: boolean = await user_API.AuthenticateGoogleUser(
-          userData.email,
-          userData.sub
-        );
+        await user_API.AuthenticateGoogleUser(userData.email, userData.sub);
 
         navigate("/home");
       }

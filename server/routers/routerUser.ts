@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { IUserType } from "../interfaces/ENUMs";
 import { IUser, User } from "../interfaces/IUser";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
@@ -69,15 +70,19 @@ routerUser.post("/auth-google", async (req: Request, res: Response) => {
   }
 });
 
-routerUser.post("/get-by-email", async (req: Request, res: Response) => {
+routerUser.post("/type", async (req: Request, res: Response) => {
   const email = req.body.email;
-  const user = await User.find({ email: email });
-
-  if (user === null || user.length == 0) {
-    res.status(204).send();
-  } else {
-    res.status(200).send(user);
+  const user: IUser | null = await User.findOne({ email: email });
+  let userType: IUserType | null = null;
+  if (user === null) {
+    userType = IUserType.NONE;
+  } else if (user.password !== "") {
+    userType = IUserType.LOCAL;
+  } else if (user.googleID !== "") {
+    userType = IUserType.GOOGLE;
   }
+
+  res.send(JSON.stringify(userType));
 });
 
 routerUser.post("/login", async (req: Request, res: Response) => {

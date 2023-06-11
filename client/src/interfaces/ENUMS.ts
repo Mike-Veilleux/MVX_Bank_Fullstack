@@ -8,3 +8,9 @@ export enum IAccountType {
   SAVINGS = "SAVINGS",
   CHECK = "CHECK",
 }
+
+export enum IUserType {
+  NONE = 0,
+  LOCAL = 1,
+  GOOGLE = 2,
+}

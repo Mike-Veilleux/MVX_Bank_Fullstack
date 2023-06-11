@@ -1,7 +1,7 @@
 import axios from "axios";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 import { create } from "zustand";
-import { IAccountType } from "../interfaces/ENUMS";
+import { IAccountType, IUserType } from "../interfaces/ENUMS";
 import { CreateNewAccount } from "../interfaces/IAccount";
 import { IUser } from "../interfaces/IUser";
 import { useAccountStore } from "./useAccountsStore";
@@ -23,7 +23,7 @@ export type userStore = {
       _email: string,
       _googleID: string
     ) => Promise<boolean>;
-    FetchUserByEmail: (_userEmail: string) => Promise<IUser>;
+    CheckExistingUser: (_userEmail: string) => Promise<IUserType | null>;
     SubmitLogin: (
       _userEmail: string,
       _userPassword: string
@@ -86,7 +86,6 @@ export const useUserStore = create<userStore>((set, get) => ({
           password: _password,
         },
       });
-      console.log(response);
       if (response.status === 204) {
         // show no user found toast
         return false;
@@ -121,27 +120,18 @@ export const useUserStore = create<userStore>((set, get) => ({
         return true;
       }
     },
-    FetchUserByEmail: async (_userEmail) => {
-      let data: IUser | undefined;
+    CheckExistingUser: async (_userEmail) => {
+      let data: IUserType | null;
       const response = await axios({
         method: "POST",
-        url: `${import.meta.env.VITE_API_BASE_URL}/user/get-by-email`,
+        url: `${import.meta.env.VITE_API_BASE_URL}/user/type`,
         withCredentials: true,
         data: {
           email: _userEmail,
         },
       });
-      data = response.data[0];
-      if (response.status == 200) {
-        // const acc = await useAccountStore
-        //   .getState()
-        //   .API.FetchAccount(data!._id!, IAccountType.SAVINGS);
-
-        // set((state) => ({ user: data! }));
-        return data!;
-      } else {
-        return {};
-      }
+      data = response.data;
+      return data;
     },
     SubmitLogin: async (_userEmail, _userPassword) => {
       let data: IUser | undefined;
