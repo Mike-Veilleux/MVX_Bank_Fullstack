@@ -1,4 +1,6 @@
+import dotenv from "dotenv";
 import express, { Request, Response } from "express";
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 export const routerPing = express.Router();
 
 routerPing.get("/", (req: Request, res: Response) => {
