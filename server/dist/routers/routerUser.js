@@ -88,24 +88,6 @@ exports.routerUser.post("/login-type", (req, res) => __awaiter(void 0, void 0, v
     }
     res.send(JSON.stringify(userType));
 }));
-// routerUser.post("/login", async (req: Request, res: Response) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
-//   const user: IUser | null | undefined = await User.findOne({
-//     email: email,
-//     password: password,
-//   });
-//   if (user === undefined || user === null) {
-//     res.status(204).send();
-//   } else {
-//     const token = jwt.sign(
-//       { value: user?.email },
-//       process.env.SESSION_TOKEN_SECRET!
-//     );
-//     res.cookie("mvx_jwt", token);
-//     res.status(200).send(user);
-//   }
-// });
 exports.routerUser.post("/logout", (req, res) => {
     const token = jsonwebtoken_1.default.sign({ value: "Expired" }, process.env.SESSION_TOKEN_SECRET);
     res

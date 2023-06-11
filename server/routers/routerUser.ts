@@ -85,26 +85,6 @@ routerUser.post("/login-type", async (req: Request, res: Response) => {
   res.send(JSON.stringify(userType));
 });
 
-// routerUser.post("/login", async (req: Request, res: Response) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
-//   const user: IUser | null | undefined = await User.findOne({
-//     email: email,
-//     password: password,
-//   });
-
-//   if (user === undefined || user === null) {
-//     res.status(204).send();
-//   } else {
-//     const token = jwt.sign(
-//       { value: user?.email },
-//       process.env.SESSION_TOKEN_SECRET!
-//     );
-//     res.cookie("mvx_jwt", token);
-//     res.status(200).send(user);
-//   }
-// });
-
 routerUser.post("/logout", (req: Request, res: Response) => {
   const token = jwt.sign(
     { value: "Expired" },

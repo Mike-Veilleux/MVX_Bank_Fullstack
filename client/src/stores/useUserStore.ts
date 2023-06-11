@@ -113,7 +113,7 @@ export const useUserStore = create<userStore>((set, get) => ({
       let data: IUserType | null;
       const response = await axios({
         method: "POST",
-        url: `${import.meta.env.VITE_API_BASE_URL}/user/type`,
+        url: `${import.meta.env.VITE_API_BASE_URL}/user/login-type`,
         withCredentials: true,
         data: {
           email: _email,
