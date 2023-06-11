@@ -15,7 +15,7 @@ const GoogleSignupButton = () => {
     const jwtToken = response.credential;
     const userData: GoogleAccount = jwtDecode(jwtToken);
 
-    const isUserExisting: boolean = await user_API.AuthenticateGoogleUser(
+    const isUserExisting: boolean = await user_API.LoginGoogleUser(
       userData.email,
       userData.sub
     );

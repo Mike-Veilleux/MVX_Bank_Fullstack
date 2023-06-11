@@ -16,11 +16,11 @@ const GoogleLogin = () => {
     const jwtToken = response.credential;
     const userData: GoogleAccount = jwtDecode(jwtToken);
 
-    const isExistingUser: IUserType | null = await user_API.CheckExistingUser(
+    const userType: IUserType | null = await user_API.LoginUserType(
       userData!.email
     );
     setLoading(false);
-    if (isExistingUser === IUserType.NONE) {
+    if (userType === IUserType.NONE) {
       user_ACTIONS.setNewUser({
         name: userData.name,
         email: userData.email,
@@ -30,12 +30,12 @@ const GoogleLogin = () => {
 
       navigate("/create-account");
     } else {
-      if (isExistingUser !== IUserType.GOOGLE) {
+      if (userType !== IUserType.GOOGLE) {
         alert(
-          `This email is linked to an existing MVX account, Try log in with "MVX Bank Login" method!`
+          `This email is linked to an existing MVX Bank account, Try log in with "MVX Bank Login" method!`
         );
       } else {
-        await user_API.AuthenticateGoogleUser(userData.email, userData.sub);
+        await user_API.LoginGoogleUser(userData.email, userData.sub);
 
         navigate("/home");
       }

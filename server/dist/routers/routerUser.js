@@ -21,7 +21,7 @@ const ENUMs_1 = require("../interfaces/ENUMs");
 const IUser_1 = require("../interfaces/IUser");
 dotenv_1.default.config({ path: `.env.${process.env.NODE_ENV}` });
 exports.routerUser = express_1.default.Router();
-exports.routerUser.post("/auth-local", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerUser.post("/login-local", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body.email;
     const password = req.body.password;
     const user = yield IUser_1.User.findOne({
@@ -50,7 +50,7 @@ exports.routerUser.post("/auth-local", (req, res) => __awaiter(void 0, void 0, v
         });
     }
 }));
-exports.routerUser.post("/auth-google", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerUser.post("/login-google", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body.email;
     const googleID = req.body.googleID;
     const user = yield IUser_1.User.findOne({
@@ -73,7 +73,7 @@ exports.routerUser.post("/auth-google", (req, res) => __awaiter(void 0, void 0, 
             .send(user);
     }
 }));
-exports.routerUser.post("/type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerUser.post("/login-type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body.email;
     const user = yield IUser_1.User.findOne({ email: email });
     let userType = null;
@@ -88,22 +88,24 @@ exports.routerUser.post("/type", (req, res) => __awaiter(void 0, void 0, void 0,
     }
     res.send(JSON.stringify(userType));
 }));
-exports.routerUser.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const email = req.body.email;
-    const password = req.body.password;
-    const user = yield IUser_1.User.findOne({
-        email: email,
-        password: password,
-    });
-    if (user === undefined || user === null) {
-        res.status(204).send();
-    }
-    else {
-        const token = jsonwebtoken_1.default.sign({ value: user === null || user === void 0 ? void 0 : user.email }, process.env.SESSION_TOKEN_SECRET);
-        res.cookie("mvx_jwt", token);
-        res.status(200).send(user);
-    }
-}));
+// routerUser.post("/login", async (req: Request, res: Response) => {
+//   const email = req.body.email;
+//   const password = req.body.password;
+//   const user: IUser | null | undefined = await User.findOne({
+//     email: email,
+//     password: password,
+//   });
+//   if (user === undefined || user === null) {
+//     res.status(204).send();
+//   } else {
+//     const token = jwt.sign(
+//       { value: user?.email },
+//       process.env.SESSION_TOKEN_SECRET!
+//     );
+//     res.cookie("mvx_jwt", token);
+//     res.status(200).send(user);
+//   }
+// });
 exports.routerUser.post("/logout", (req, res) => {
     const token = jsonwebtoken_1.default.sign({ value: "Expired" }, process.env.SESSION_TOKEN_SECRET);
     res

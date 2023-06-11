@@ -4,7 +4,7 @@ import { Button, Card, Form } from "react-bootstrap";
 import { CreateUser, IUser } from "../interfaces/IUser";
 import { useAccount_API } from "../stores/useAccountsStore";
 import {
-  useNewUser,
+  useNewUserFormData,
   useUser,
   useUser_ACTIONS,
   useUser_API,
@@ -21,7 +21,7 @@ import GoogleSignupButton from "./components/oAuth/GoogleSignupButton";
 
 const CreateNewUser = () => {
   const user = useUser();
-  const newUser = useNewUser();
+  const newUser = useNewUserFormData();
   const user_ACTIONS = useUser_ACTIONS();
   const user_API = useUser_API();
   const account_API = useAccount_API();
