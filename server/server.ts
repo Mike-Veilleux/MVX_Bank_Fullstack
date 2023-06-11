@@ -43,6 +43,6 @@ const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log(`Connected to MongoDB`));
 
-app.listen(process.env.PORT, () =>
-  console.log(`⚡️Server is running on port ${process.env.PORT}⚡️`)
+app.listen(process.env.API_PORT, () =>
+  console.log(`⚡️Server is running on port ${process.env.API_PORT}⚡️`)
 );
