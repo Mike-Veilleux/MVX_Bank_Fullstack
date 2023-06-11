@@ -16,7 +16,7 @@ const routerUser_1 = require("./routers/routerUser");
 dotenv_1.default.config({ path: `.env.${process.env.NODE_ENV}` });
 const app = (0, express_1.default)();
 app.use(function (req, res, next) {
-    // res.header("Access-Control-Allow-Origin", req.header("origin"));
+    res.header("Access-Control-Allow-Origin", req.header("origin"));
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Credentials", "true");
     next();
