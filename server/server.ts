@@ -13,6 +13,10 @@ dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 const app = express();
 
 app.use(function (req, res, next) {
+  res.header(
+    "Content-Security-Policy",
+    "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'"
+  );
   res.header("Access-Control-Allow-Origin", req.header("origin"));
   res.header(
     "Access-Control-Allow-Headers",
