@@ -14,8 +14,9 @@ const app = express();
 
 app.use(function (req, res, next) {
   res.header(
-    "Content-Security-Policy-Report-Only",
-    "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'"
+    // "Content-Security-Policy-Report-Only",
+    "Content-Security-Policy",
+    "default-src 'self' ws: https://ssl.gstatic.com; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'"
   );
   res.header("Access-Control-Allow-Origin", req.header("origin"));
   res.header(
