@@ -35,13 +35,13 @@ export const useUserStore = create<userStore>((set, get) => ({
   },
   API: {
     CreateNewUser: async (_newUser) => {
-      let data: IUser | undefined;
+      let data: IUser | null;
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/user/new`,
         // withCredentials: true,
         data: {
-          user: _newUser,
+          newUser: _newUser,
         },
       });
       data = response.data;

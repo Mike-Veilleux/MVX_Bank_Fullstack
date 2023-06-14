@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { User_CreateNew } from "../DAL";
 import { IUserType } from "../interfaces/ENUMs";
 import { IUser, User } from "../interfaces/IUser";
 
@@ -101,15 +102,6 @@ routerUser.post("/logout", (req: Request, res: Response) => {
 });
 
 routerUser.post("/new", async (req: Request, res: Response) => {
-  const newUser: IUser = req.body.user;
-  const matchingUser = await User.findOne({ email: newUser.email });
-  if (!matchingUser) {
-    const result = new User(newUser);
-    result.save((err, newUser) => {
-      if (err) return console.log(err);
-      res.status(201).send(newUser);
-    });
-  } else {
-    res.status(205).send("Email already exist!");
-  }
+  const newUser: IUser | null = await User_CreateNew(req.body.newUser);
+  res.send(newUser);
 });

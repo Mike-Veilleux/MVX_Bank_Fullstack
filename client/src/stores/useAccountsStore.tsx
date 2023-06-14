@@ -38,7 +38,7 @@ export const useAccountStore = create<accountStore>((set, get) => ({
       let data: IAccount | undefined;
       const response = await axios({
         method: "POST",
-        url: `${import.meta.env.VITE_API_BASE_URL}/account/new`,
+        url: `${import.meta.env.VITE_API_BASE_URL}/account/addNew`,
         withCredentials: true,
         data: {
           account: _account,
@@ -47,51 +47,67 @@ export const useAccountStore = create<accountStore>((set, get) => ({
       data = response.data;
       set((state) => ({ activeAccount: data }));
     },
-    FetchAndSetActiveAccount: async (_userID, _accountType) => {
-      let data: IAccount | undefined;
+    FetchAndSetActiveAccount: async (_ownersID, _accountType) => {
+      let data: IAccount | null | undefined;
       const response = await axios({
         method: "POST",
-        url: `${import.meta.env.VITE_API_BASE_URL}/account/get-by-id`,
+        url: `${
+          import.meta.env.VITE_API_BASE_URL
+        }/account/getBy-ownerId-and-type`,
         withCredentials: true,
         data: {
-          id: _userID,
+          ownersID: _ownersID,
           accountType: _accountType,
         },
       });
+
       data = response.data;
-      set((state) => ({ activeAccount: data }));
-      return data!;
+
+      if (data !== null) {
+        set((state) => ({ activeAccount: data }));
+        return data!;
+      } else {
+        return null;
+      }
     },
-    UpdateBalance: async (_id, _amount) => {
-      let data: IAccount | undefined;
+    UpdateBalance: async (_ownersID, _amount) => {
+      let data: IAccount | null;
       const response = await axios({
-        method: "POST",
+        method: "PATCH",
         url: `${import.meta.env.VITE_API_BASE_URL}/account/update-balance`,
         withCredentials: true,
         data: {
-          id: _id,
+          ownersID: _ownersID,
           accountType: get().activeAccount?.accountType,
           amount: _amount,
         },
       });
       data = response.data;
-      set((state) => ({ activeAccount: data }));
-      return data!;
+      if (data !== null) {
+        set((state) => ({ activeAccount: data }));
+        return data!;
+      } else {
+        return null;
+      }
     },
     AddTransactionToAccount: async (_accountID, _newTransaction) => {
       let data: IAccount | undefined;
       const response = await axios({
-        method: "POST",
+        method: "PATCH",
         url: `${import.meta.env.VITE_API_BASE_URL}/account/add-transaction`,
         withCredentials: true,
         data: {
-          id: _accountID,
+          accountID: _accountID,
           newTransaction: _newTransaction,
         },
       });
       data = response.data;
-      set((state) => ({ activeAccount: data }));
-      return data!;
+      if (data !== null) {
+        set((state) => ({ activeAccount: data }));
+        return data!;
+      } else {
+        return null;
+      }
     },
   },
 }));

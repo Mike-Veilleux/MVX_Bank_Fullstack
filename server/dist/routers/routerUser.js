@@ -17,6 +17,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const DAL_1 = require("../DAL");
 const ENUMs_1 = require("../interfaces/ENUMs");
 const IUser_1 = require("../interfaces/IUser");
 dotenv_1.default.config({ path: `.env.${process.env.NODE_ENV}` });
@@ -100,17 +101,6 @@ exports.routerUser.post("/logout", (req, res) => {
         .send({});
 });
 exports.routerUser.post("/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newUser = req.body.user;
-    const matchingUser = yield IUser_1.User.findOne({ email: newUser.email });
-    if (!matchingUser) {
-        const result = new IUser_1.User(newUser);
-        result.save((err, newUser) => {
-            if (err)
-                return console.log(err);
-            res.status(201).send(newUser);
-        });
-    }
-    else {
-        res.status(205).send("Email already exist!");
-    }
+    const newUser = yield (0, DAL_1.User_CreateNew)(req.body.newUser);
+    res.send(newUser);
 }));

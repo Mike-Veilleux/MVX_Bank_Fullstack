@@ -1,72 +1,43 @@
 import express, { Request, Response } from "express";
-import { Account, IAccount } from "../interfaces/IAccount";
+import {
+  AddNewAccount,
+  AddTransactionToAccount,
+  GetAccountByOwnerIdAndType,
+  UpdateAccountBalance,
+} from "../DAL";
+import { IAccount } from "../interfaces/IAccount";
 
 export const routerAccount = express.Router();
 
-routerAccount.post("/get-by-id", async (req: Request, res: Response) => {
-  const id = req.body.id;
-  const accountType = req.body.accountType;
-
-  const account: IAccount | null = await Account.findOne({
-    ownersID: id,
-    accountType: accountType,
-  });
-
-  if (account === null || account === undefined) {
-    res.status(204);
-  } else {
-    res.send(account);
-  }
+routerAccount.post("/add-new", async (req: Request, res: Response) => {
+  const newAccount: IAccount | null = await AddNewAccount(req.body.account);
+  res.send(newAccount);
 });
 
-routerAccount.post("/new", async (req: Request, res: Response) => {
-  const newAccount: IAccount = req.body.account;
-
-  if (newAccount) {
-    const result = new Account(newAccount);
-    result.save((err, nAcc) => {
-      if (err) return console.log(err);
-      res.status(201).send(nAcc);
-    });
-  } else {
-    res.status(404).send("Request Failed!");
-  }
-});
-
-routerAccount.post("/update-balance", async (req: Request, res: Response) => {
-  const id = req.body.id;
-  const accountType = req.body.accountType;
-  const amount = parseInt(req.body.amount);
-
-  const account = await Account.findOneAndUpdate(
-    {
-      ownersID: id,
-      accountType: accountType,
-    },
-    { $inc: { balance: amount } },
-    { new: true }
-  ).exec();
-
-  if (account === null || account === undefined) {
-    res.status(204);
-  } else {
+routerAccount.post(
+  "/getBy-ownerId-and-type",
+  async (req: Request, res: Response) => {
+    const account: IAccount | null = await GetAccountByOwnerIdAndType(
+      req.body.ownersID,
+      req.body.accountType
+    );
     res.send(account);
   }
+);
+
+routerAccount.patch("/update-balance", async (req: Request, res: Response) => {
+  const updatedAccount: IAccount | null = await UpdateAccountBalance(
+    req.body.ownersID,
+    req.body.accountType,
+    parseInt(req.body.amount)
+  );
+  res.send(updatedAccount);
 });
 
-routerAccount.post("/add-transaction", async (req: Request, res: Response) => {
-  const id = req.body.id;
-  const transaction = req.body.newTransaction;
-
-  const account = await Account.findByIdAndUpdate(
-    id,
-    { $push: { history: { $each: [transaction] } } },
-    { new: true }
-  ).exec();
-
-  if (account === null || account === undefined) {
-    res.status(204);
-  } else {
-    res.send(account);
-  }
+routerAccount.patch("/add-transaction", async (req: Request, res: Response) => {
+  const updatedAccount: IAccount | null = await AddTransactionToAccount(
+    req.body.accountID,
+    req.body.newTransaction
+  );
+  res.send(updatedAccount);
 });

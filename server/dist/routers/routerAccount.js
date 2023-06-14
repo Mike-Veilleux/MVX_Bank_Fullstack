@@ -14,59 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerAccount = void 0;
 const express_1 = __importDefault(require("express"));
-const IAccount_1 = require("../interfaces/IAccount");
+const DAL_1 = require("../DAL");
 exports.routerAccount = express_1.default.Router();
-exports.routerAccount.post("/get-by-id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.body.id;
-    const accountType = req.body.accountType;
-    const account = yield IAccount_1.Account.findOne({
-        ownersID: id,
-        accountType: accountType,
-    });
-    if (account === null || account === undefined) {
-        res.status(204);
-    }
-    else {
-        res.send(account);
-    }
+exports.routerAccount.post("/add-new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newAccount = yield (0, DAL_1.AddNewAccount)(req.body.account);
+    res.send(newAccount);
 }));
-exports.routerAccount.post("/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newAccount = req.body.account;
-    if (newAccount) {
-        const result = new IAccount_1.Account(newAccount);
-        result.save((err, nAcc) => {
-            if (err)
-                return console.log(err);
-            res.status(201).send(nAcc);
-        });
-    }
-    else {
-        res.status(404).send("Request Failed!");
-    }
+exports.routerAccount.post("/getBy-ownerId-and-type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const account = yield (0, DAL_1.GetAccountByOwnerIdAndType)(req.body.ownersID, req.body.accountType);
+    res.send(account);
 }));
-exports.routerAccount.post("/update-balance", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.body.id;
-    const accountType = req.body.accountType;
-    const amount = parseInt(req.body.amount);
-    const account = yield IAccount_1.Account.findOneAndUpdate({
-        ownersID: id,
-        accountType: accountType,
-    }, { $inc: { balance: amount } }, { new: true }).exec();
-    if (account === null || account === undefined) {
-        res.status(204);
-    }
-    else {
-        res.send(account);
-    }
+exports.routerAccount.patch("/update-balance", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedAccount = yield (0, DAL_1.UpdateAccountBalance)(req.body.ownersID, req.body.accountType, parseInt(req.body.amount));
+    res.send(updatedAccount);
 }));
-exports.routerAccount.post("/add-transaction", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.body.id;
-    const transaction = req.body.newTransaction;
-    const account = yield IAccount_1.Account.findByIdAndUpdate(id, { $push: { history: { $each: [transaction] } } }, { new: true }).exec();
-    if (account === null || account === undefined) {
-        res.status(204);
-    }
-    else {
-        res.send(account);
-    }
+exports.routerAccount.patch("/add-transaction", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedAccount = yield (0, DAL_1.AddTransactionToAccount)(req.body.accountID, req.body.newTransaction);
+    res.send(updatedAccount);
 }));
