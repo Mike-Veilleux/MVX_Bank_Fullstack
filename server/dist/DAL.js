@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User_CreateNew = exports.AddTransactionToAccount = exports.UpdateAccountBalance = exports.GetAccountByOwnerIdAndType = exports.AddNewAccount = void 0;
+exports.User_GetLocalCredentials = exports.User_GetGoogleCredentials = exports.User_GetUserLoginType = exports.User_CreateNew = exports.Account_AddTransaction = exports.Account_UpdateBalance = exports.Account_GetByOwnerIdAndType = exports.Account_CreateNew = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const ENUMs_1 = require("./interfaces/ENUMs");
 const IAccount_1 = require("./interfaces/IAccount");
 const IUser_1 = require("./interfaces/IUser");
 dotenv_1.default.config({ path: `.env.${process.env.NODE_ENV}` });
@@ -23,7 +24,7 @@ mongoose_1.default.connect(process.env.DB_CONNECTION_STRING);
 const db = mongoose_1.default.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log(`Connected to MongoDB`));
-function AddNewAccount(_account) {
+function Account_CreateNew(_account) {
     return __awaiter(this, void 0, void 0, function* () {
         const dbModel = new IAccount_1.Account(_account);
         let newAccount = null;
@@ -32,11 +33,12 @@ function AddNewAccount(_account) {
                 return console.log(err);
             newAccount = nAcc;
         });
+        console.log("New Account: ", newAccount);
         return newAccount;
     });
 }
-exports.AddNewAccount = AddNewAccount;
-function GetAccountByOwnerIdAndType(_ownersID, _accountType) {
+exports.Account_CreateNew = Account_CreateNew;
+function Account_GetByOwnerIdAndType(_ownersID, _accountType) {
     return __awaiter(this, void 0, void 0, function* () {
         const account = yield IAccount_1.Account.findOne({
             ownersID: _ownersID,
@@ -45,8 +47,8 @@ function GetAccountByOwnerIdAndType(_ownersID, _accountType) {
         return account;
     });
 }
-exports.GetAccountByOwnerIdAndType = GetAccountByOwnerIdAndType;
-function UpdateAccountBalance(_ownersID, _accountType, _amount) {
+exports.Account_GetByOwnerIdAndType = Account_GetByOwnerIdAndType;
+function Account_UpdateBalance(_ownersID, _accountType, _amount) {
     return __awaiter(this, void 0, void 0, function* () {
         const updatedAccount = yield IAccount_1.Account.findOneAndUpdate({
             ownersID: _ownersID,
@@ -55,32 +57,67 @@ function UpdateAccountBalance(_ownersID, _accountType, _amount) {
         return updatedAccount;
     });
 }
-exports.UpdateAccountBalance = UpdateAccountBalance;
-function AddTransactionToAccount(_accountID, _transaction) {
+exports.Account_UpdateBalance = Account_UpdateBalance;
+function Account_AddTransaction(_accountID, _transaction) {
     return __awaiter(this, void 0, void 0, function* () {
         const updatedAccount = yield IAccount_1.Account.findByIdAndUpdate(_accountID, { $push: { history: { $each: [_transaction] } } }, { new: true }).exec();
         return updatedAccount;
     });
 }
-exports.AddTransactionToAccount = AddTransactionToAccount;
+exports.Account_AddTransaction = Account_AddTransaction;
 function User_CreateNew(_newUser) {
     return __awaiter(this, void 0, void 0, function* () {
         const matchingUser = yield IUser_1.User.findOne({
             email: _newUser.email,
         });
+        console.log("NewUser Matching: ", matchingUser);
         let newUser = null;
-        if (!matchingUser) {
+        if (matchingUser === null) {
             const dbModel = new IUser_1.User(_newUser);
-            dbModel.save((err, nUser) => {
-                if (err)
-                    return console.log(err);
-                newUser = nUser;
-            });
+            newUser = yield dbModel.save();
+            return newUser;
         }
         else {
-            newUser = null;
+            return null;
         }
-        return newUser;
+        // console.log("From DAL", newUser);
+        // return newUser;
     });
 }
 exports.User_CreateNew = User_CreateNew;
+function User_GetUserLoginType(_email) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield IUser_1.User.findOne({ email: _email });
+        let loginType = null;
+        if (user === null) {
+            loginType = ENUMs_1.IUserType.NONE;
+        }
+        else if (user.password !== "") {
+            loginType = ENUMs_1.IUserType.LOCAL;
+        }
+        else if (user.googleID !== "") {
+            loginType = ENUMs_1.IUserType.GOOGLE;
+        }
+        return loginType;
+    });
+}
+exports.User_GetUserLoginType = User_GetUserLoginType;
+function User_GetGoogleCredentials(_email, _googleID) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const googleCredential = yield IUser_1.User.findOne({
+            email: _email,
+            googleID: _googleID,
+        });
+        return googleCredential;
+    });
+}
+exports.User_GetGoogleCredentials = User_GetGoogleCredentials;
+function User_GetLocalCredentials(_email) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const localCredential = yield IUser_1.User.findOne({
+            email: _email,
+        });
+        return localCredential;
+    });
+}
+exports.User_GetLocalCredentials = User_GetLocalCredentials;

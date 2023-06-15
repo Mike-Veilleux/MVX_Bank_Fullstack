@@ -18,21 +18,15 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const DAL_1 = require("../DAL");
-const ENUMs_1 = require("../interfaces/ENUMs");
-const IUser_1 = require("../interfaces/IUser");
 dotenv_1.default.config({ path: `.env.${process.env.NODE_ENV}` });
 exports.routerUser = express_1.default.Router();
 exports.routerUser.post("/login-local", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const email = req.body.email;
-    const password = req.body.password;
-    const user = yield IUser_1.User.findOne({
-        email: email,
-    });
+    const user = yield (0, DAL_1.User_GetLocalCredentials)(req.body.email);
     if (user === undefined || user === null) {
         res.status(204).send();
     }
     else {
-        bcrypt_1.default.compare(password, user === null || user === void 0 ? void 0 : user.password, (err, result) => {
+        bcrypt_1.default.compare(req.body.password, user === null || user === void 0 ? void 0 : user.password, (err, result) => {
             if (result === true) {
                 const userID = user._id;
                 const token = jsonwebtoken_1.default.sign({ value: userID }, process.env.SESSION_TOKEN_SECRET);
@@ -52,17 +46,12 @@ exports.routerUser.post("/login-local", (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 exports.routerUser.post("/login-google", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const email = req.body.email;
-    const googleID = req.body.googleID;
-    const user = yield IUser_1.User.findOne({
-        email: email,
-        googleID: googleID,
-    });
-    if (user === undefined || user === null) {
+    const googleCredentials = yield (0, DAL_1.User_GetGoogleCredentials)(req.body.email, req.body.googleID);
+    if (googleCredentials === null) {
         res.status(204).send();
     }
     else {
-        const userID = user._id;
+        const userID = googleCredentials._id;
         const token = jsonwebtoken_1.default.sign({ value: userID }, process.env.SESSION_TOKEN_SECRET);
         res
             .cookie("mvx_jwt", token, {
@@ -71,23 +60,12 @@ exports.routerUser.post("/login-google", (req, res) => __awaiter(void 0, void 0,
             secure: true,
             maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
         })
-            .send(user);
+            .send(googleCredentials);
     }
 }));
 exports.routerUser.post("/login-type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const email = req.body.email;
-    const user = yield IUser_1.User.findOne({ email: email });
-    let userType = null;
-    if (user === null) {
-        userType = ENUMs_1.IUserType.NONE;
-    }
-    else if (user.password !== "") {
-        userType = ENUMs_1.IUserType.LOCAL;
-    }
-    else if (user.googleID !== "") {
-        userType = ENUMs_1.IUserType.GOOGLE;
-    }
-    res.send(JSON.stringify(userType));
+    const loginType = yield (0, DAL_1.User_GetUserLoginType)(req.body.email);
+    res.send(JSON.stringify(loginType));
 }));
 exports.routerUser.post("/logout", (req, res) => {
     const token = jsonwebtoken_1.default.sign({ value: "Expired" }, process.env.SESSION_TOKEN_SECRET);
@@ -102,5 +80,6 @@ exports.routerUser.post("/logout", (req, res) => {
 });
 exports.routerUser.post("/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newUser = yield (0, DAL_1.User_CreateNew)(req.body.newUser);
+    console.log("From API", newUser);
     res.send(newUser);
 }));

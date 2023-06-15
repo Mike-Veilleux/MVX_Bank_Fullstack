@@ -1,23 +1,23 @@
 import express, { Request, Response } from "express";
 import {
-  AddNewAccount,
-  AddTransactionToAccount,
-  GetAccountByOwnerIdAndType,
-  UpdateAccountBalance,
+  Account_AddTransaction,
+  Account_CreateNew,
+  Account_GetByOwnerIdAndType,
+  Account_UpdateBalance,
 } from "../DAL";
 import { IAccount } from "../interfaces/IAccount";
 
 export const routerAccount = express.Router();
 
 routerAccount.post("/add-new", async (req: Request, res: Response) => {
-  const newAccount: IAccount | null = await AddNewAccount(req.body.account);
+  const newAccount: IAccount | null = await Account_CreateNew(req.body.account);
   res.send(newAccount);
 });
 
 routerAccount.post(
   "/getBy-ownerId-and-type",
   async (req: Request, res: Response) => {
-    const account: IAccount | null = await GetAccountByOwnerIdAndType(
+    const account: IAccount | null = await Account_GetByOwnerIdAndType(
       req.body.ownersID,
       req.body.accountType
     );
@@ -26,7 +26,7 @@ routerAccount.post(
 );
 
 routerAccount.patch("/update-balance", async (req: Request, res: Response) => {
-  const updatedAccount: IAccount | null = await UpdateAccountBalance(
+  const updatedAccount: IAccount | null = await Account_UpdateBalance(
     req.body.ownersID,
     req.body.accountType,
     parseInt(req.body.amount)
@@ -35,7 +35,7 @@ routerAccount.patch("/update-balance", async (req: Request, res: Response) => {
 });
 
 routerAccount.patch("/add-transaction", async (req: Request, res: Response) => {
-  const updatedAccount: IAccount | null = await AddTransactionToAccount(
+  const updatedAccount: IAccount | null = await Account_AddTransaction(
     req.body.accountID,
     req.body.newTransaction
   );

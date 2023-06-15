@@ -17,18 +17,18 @@ const express_1 = __importDefault(require("express"));
 const DAL_1 = require("../DAL");
 exports.routerAccount = express_1.default.Router();
 exports.routerAccount.post("/add-new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newAccount = yield (0, DAL_1.AddNewAccount)(req.body.account);
+    const newAccount = yield (0, DAL_1.Account_CreateNew)(req.body.account);
     res.send(newAccount);
 }));
 exports.routerAccount.post("/getBy-ownerId-and-type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const account = yield (0, DAL_1.GetAccountByOwnerIdAndType)(req.body.ownersID, req.body.accountType);
+    const account = yield (0, DAL_1.Account_GetByOwnerIdAndType)(req.body.ownersID, req.body.accountType);
     res.send(account);
 }));
 exports.routerAccount.patch("/update-balance", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const updatedAccount = yield (0, DAL_1.UpdateAccountBalance)(req.body.ownersID, req.body.accountType, parseInt(req.body.amount));
+    const updatedAccount = yield (0, DAL_1.Account_UpdateBalance)(req.body.ownersID, req.body.accountType, parseInt(req.body.amount));
     res.send(updatedAccount);
 }));
 exports.routerAccount.patch("/add-transaction", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const updatedAccount = yield (0, DAL_1.AddTransactionToAccount)(req.body.accountID, req.body.newTransaction);
+    const updatedAccount = yield (0, DAL_1.Account_AddTransaction)(req.body.accountID, req.body.newTransaction);
     res.send(updatedAccount);
 }));

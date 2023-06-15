@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import { IUserType } from "./interfaces/ENUMs";
 import { Account, IAccount } from "./interfaces/IAccount";
 import { ITransaction } from "./interfaces/ITransaction";
 import { IUser, User } from "./interfaces/IUser";
@@ -11,17 +12,18 @@ const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log(`Connected to MongoDB`));
 
-export async function AddNewAccount(_account: IAccount) {
+export async function Account_CreateNew(_account: IAccount) {
   const dbModel = new Account(_account);
   let newAccount: IAccount | null = null;
   dbModel.save((err, nAcc) => {
     if (err) return console.log(err);
     newAccount = nAcc;
   });
+  console.log("New Account: ", newAccount);
   return newAccount;
 }
 
-export async function GetAccountByOwnerIdAndType(
+export async function Account_GetByOwnerIdAndType(
   _ownersID: string,
   _accountType: string
 ) {
@@ -32,7 +34,7 @@ export async function GetAccountByOwnerIdAndType(
   return account;
 }
 
-export async function UpdateAccountBalance(
+export async function Account_UpdateBalance(
   _ownersID: string,
   _accountType: string,
   _amount: number
@@ -48,7 +50,7 @@ export async function UpdateAccountBalance(
   return updatedAccount;
 }
 
-export async function AddTransactionToAccount(
+export async function Account_AddTransaction(
   _accountID: string,
   _transaction: ITransaction
 ) {
@@ -64,15 +66,47 @@ export async function User_CreateNew(_newUser: IUser) {
   const matchingUser: IUser | null | undefined = await User.findOne({
     email: _newUser.email,
   });
+
+  console.log("NewUser Matching: ", matchingUser);
   let newUser: IUser | null = null;
-  if (!matchingUser) {
+  if (matchingUser === null) {
     const dbModel = new User(_newUser);
-    dbModel.save((err, nUser) => {
-      if (err) return console.log(err);
-      newUser = nUser;
-    });
+    newUser = await dbModel.save();
+    return newUser;
   } else {
-    newUser = null;
+    return null;
   }
-  return newUser;
+  // console.log("From DAL", newUser);
+  // return newUser;
+}
+
+export async function User_GetUserLoginType(_email: string) {
+  const user: IUser | null = await User.findOne({ email: _email });
+  let loginType: IUserType | null = null;
+  if (user === null) {
+    loginType = IUserType.NONE;
+  } else if (user.password !== "") {
+    loginType = IUserType.LOCAL;
+  } else if (user.googleID !== "") {
+    loginType = IUserType.GOOGLE;
+  }
+  return loginType;
+}
+
+export async function User_GetGoogleCredentials(
+  _email: string,
+  _googleID: string
+) {
+  const googleCredential: IUser | null = await User.findOne({
+    email: _email,
+    googleID: _googleID,
+  });
+  return googleCredential;
+}
+
+export async function User_GetLocalCredentials(_email: string) {
+  const localCredential: IUser | null = await User.findOne({
+    email: _email,
+  });
+  return localCredential;
 }
