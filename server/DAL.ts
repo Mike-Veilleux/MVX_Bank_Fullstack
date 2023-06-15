@@ -14,12 +14,7 @@ db.once("open", () => console.log(`Connected to MongoDB`));
 
 export async function Account_CreateNew(_account: IAccount) {
   const dbModel = new Account(_account);
-  let newAccount: IAccount | null = null;
-  dbModel.save((err, nAcc) => {
-    if (err) return console.log(err);
-    newAccount = nAcc;
-  });
-  console.log("New Account: ", newAccount);
+  let newAccount: IAccount | null = await dbModel.save();
   return newAccount;
 }
 
@@ -66,18 +61,13 @@ export async function User_CreateNew(_newUser: IUser) {
   const matchingUser: IUser | null | undefined = await User.findOne({
     email: _newUser.email,
   });
-
-  console.log("NewUser Matching: ", matchingUser);
-  let newUser: IUser | null = null;
   if (matchingUser === null) {
     const dbModel = new User(_newUser);
-    newUser = await dbModel.save();
+    const newUser: IUser | null = await dbModel.save();
     return newUser;
   } else {
     return null;
   }
-  // console.log("From DAL", newUser);
-  // return newUser;
 }
 
 export async function User_GetUserLoginType(_email: string) {
@@ -90,6 +80,8 @@ export async function User_GetUserLoginType(_email: string) {
   } else if (user.googleID !== "") {
     loginType = IUserType.GOOGLE;
   }
+
+  console.log(loginType);
   return loginType;
 }
 
@@ -101,6 +93,7 @@ export async function User_GetGoogleCredentials(
     email: _email,
     googleID: _googleID,
   });
+  console.log(googleCredential);
   return googleCredential;
 }
 

@@ -16,7 +16,7 @@ exports.routerAccount = void 0;
 const express_1 = __importDefault(require("express"));
 const DAL_1 = require("../DAL");
 exports.routerAccount = express_1.default.Router();
-exports.routerAccount.post("/add-new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerAccount.post("/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newAccount = yield (0, DAL_1.Account_CreateNew)(req.body.account);
     res.send(newAccount);
 }));

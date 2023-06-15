@@ -9,7 +9,7 @@ import { IAccount } from "../interfaces/IAccount";
 
 export const routerAccount = express.Router();
 
-routerAccount.post("/add-new", async (req: Request, res: Response) => {
+routerAccount.post("/new", async (req: Request, res: Response) => {
   const newAccount: IAccount | null = await Account_CreateNew(req.body.account);
   res.send(newAccount);
 });

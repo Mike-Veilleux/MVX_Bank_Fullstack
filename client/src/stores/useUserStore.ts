@@ -46,7 +46,7 @@ export const useUserStore = create<userStore>((set, get) => ({
       });
       data = response.data;
       // 201 = HTTP statuscode: Resource created
-      if (response.status == 201) {
+      if (data !== null) {
         const account_API = useAccountStore.getState().API;
         const newSavingAccount = CreateNewAccount(
           IAccountType.SAVINGS,
@@ -56,8 +56,8 @@ export const useUserStore = create<userStore>((set, get) => ({
           IAccountType.CHECK,
           data?._id!
         );
-        account_API.AddNewAccount(newSavingAccount);
-        account_API.AddNewAccount(newCheckAccount);
+        account_API.CreateNewAccount(newSavingAccount);
+        account_API.CreateNewAccount(newCheckAccount);
         account_API.FetchAndSetActiveAccount(data!._id!, IAccountType.SAVINGS);
         set((state) => ({ user: data }));
         return true;

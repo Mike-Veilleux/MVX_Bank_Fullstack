@@ -12,7 +12,7 @@ export type accountStore = {
     setActiveAccount: (_account: IAccount | undefined) => void;
   };
   API: {
-    AddNewAccount: (_account: IAccount | undefined) => void;
+    CreateNewAccount: (_account: IAccount | undefined) => void;
     FetchAndSetActiveAccount: (
       _userID: string,
       _AccountType: IAccountType
@@ -34,11 +34,11 @@ export const useAccountStore = create<accountStore>((set, get) => ({
     },
   },
   API: {
-    AddNewAccount: async (_account) => {
+    CreateNewAccount: async (_account) => {
       let data: IAccount | undefined;
       const response = await axios({
         method: "POST",
-        url: `${import.meta.env.VITE_API_BASE_URL}/account/addNew`,
+        url: `${import.meta.env.VITE_API_BASE_URL}/account/new`,
         withCredentials: true,
         data: {
           account: _account,
