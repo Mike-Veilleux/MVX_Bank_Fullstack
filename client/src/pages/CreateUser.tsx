@@ -17,7 +17,7 @@ import {
   InputUserName,
 } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
-import GoogleSignUpButton from "./components/oAuth/GoogleSignUpButton";
+import GoogleSignUpButton from "./components/oAuth/GoogleSign_UpButton";
 
 const CreateNewUser = () => {
   const user = useUser();
