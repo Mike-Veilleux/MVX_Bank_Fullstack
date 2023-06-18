@@ -17,9 +17,17 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const DAL_1 = require("../DAL");
+const DAL_1 = require("../DAL/MongoDB/DAL");
 dotenv_1.default.config({ path: `.env.${process.env.NODE_ENV}` });
 exports.routerUser = express_1.default.Router();
+exports.routerUser.post("/login-type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const loginType = yield (0, DAL_1.User_GetLoginType)(req.body.email);
+    res.send(JSON.stringify(loginType));
+}));
+exports.routerUser.post("/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newUser = yield (0, DAL_1.User_CreateNew)(req.body.newUser);
+    res.send(newUser);
+}));
 exports.routerUser.post("/login-local", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield (0, DAL_1.User_GetLocalCredentials)(req.body.email);
     if (user === undefined || user === null) {
@@ -63,10 +71,6 @@ exports.routerUser.post("/login-google", (req, res) => __awaiter(void 0, void 0,
             .send(googleCredentials);
     }
 }));
-exports.routerUser.post("/login-type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const loginType = yield (0, DAL_1.User_GetUserLoginType)(req.body.email);
-    res.send(JSON.stringify(loginType));
-}));
 exports.routerUser.post("/logout", (req, res) => {
     const token = jsonwebtoken_1.default.sign({ value: "Expired" }, process.env.SESSION_TOKEN_SECRET);
     res
@@ -78,8 +82,3 @@ exports.routerUser.post("/logout", (req, res) => {
     })
         .send({});
 });
-exports.routerUser.post("/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newUser = yield (0, DAL_1.User_CreateNew)(req.body.newUser);
-    console.log("From API", newUser);
-    res.send(newUser);
-}));

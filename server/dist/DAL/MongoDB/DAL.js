@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User_GetLocalCredentials = exports.User_GetGoogleCredentials = exports.User_GetLoginType = exports.User_CreateNew = exports.Account_AddTransaction = exports.Account_UpdateBalance = exports.Account_GetByOwnerIdAndType = exports.Account_CreateNew = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const ENUMs_1 = require("./interfaces/ENUMs");
-const IAccount_1 = require("./interfaces/IAccount");
-const IUser_1 = require("./interfaces/IUser");
+const ENUMs_1 = require("../../interfaces/ENUMs");
+const AccountModel_1 = require("./AccountModel");
+const UserModel_1 = require("./UserModel");
 dotenv_1.default.config({ path: `.env.${process.env.NODE_ENV}` });
 mongoose_1.default.set("strictQuery", true);
 mongoose_1.default.connect(process.env.DB_CONNECTION_STRING);
@@ -26,7 +26,7 @@ db.on("error", (error) => console.log(error));
 db.once("open", () => console.log(`Connected to MongoDB`));
 function Account_CreateNew(_account) {
     return __awaiter(this, void 0, void 0, function* () {
-        const dbModel = new IAccount_1.Account(_account);
+        const dbModel = new AccountModel_1.Account(_account);
         let newAccount = yield dbModel.save();
         return newAccount;
     });
@@ -34,7 +34,7 @@ function Account_CreateNew(_account) {
 exports.Account_CreateNew = Account_CreateNew;
 function Account_GetByOwnerIdAndType(_ownersID, _accountType) {
     return __awaiter(this, void 0, void 0, function* () {
-        const account = yield IAccount_1.Account.findOne({
+        const account = yield AccountModel_1.Account.findOne({
             ownersID: _ownersID,
             accountType: _accountType,
         });
@@ -44,7 +44,7 @@ function Account_GetByOwnerIdAndType(_ownersID, _accountType) {
 exports.Account_GetByOwnerIdAndType = Account_GetByOwnerIdAndType;
 function Account_UpdateBalance(_ownersID, _accountType, _amount) {
     return __awaiter(this, void 0, void 0, function* () {
-        const updatedAccount = yield IAccount_1.Account.findOneAndUpdate({
+        const updatedAccount = yield AccountModel_1.Account.findOneAndUpdate({
             ownersID: _ownersID,
             accountType: _accountType,
         }, { $inc: { balance: _amount } }, { new: true }).exec();
@@ -54,18 +54,18 @@ function Account_UpdateBalance(_ownersID, _accountType, _amount) {
 exports.Account_UpdateBalance = Account_UpdateBalance;
 function Account_AddTransaction(_accountID, _transaction) {
     return __awaiter(this, void 0, void 0, function* () {
-        const updatedAccount = yield IAccount_1.Account.findByIdAndUpdate(_accountID, { $push: { history: { $each: [_transaction] } } }, { new: true }).exec();
+        const updatedAccount = yield AccountModel_1.Account.findByIdAndUpdate(_accountID, { $push: { history: { $each: [_transaction] } } }, { new: true }).exec();
         return updatedAccount;
     });
 }
 exports.Account_AddTransaction = Account_AddTransaction;
 function User_CreateNew(_newUser) {
     return __awaiter(this, void 0, void 0, function* () {
-        const matchingUser = yield IUser_1.User.findOne({
+        const matchingUser = yield UserModel_1.User.findOne({
             email: _newUser.email,
         });
         if (matchingUser === null) {
-            const dbModel = new IUser_1.User(_newUser);
+            const dbModel = new UserModel_1.User(_newUser);
             const newUser = yield dbModel.save();
             return newUser;
         }
@@ -77,7 +77,7 @@ function User_CreateNew(_newUser) {
 exports.User_CreateNew = User_CreateNew;
 function User_GetLoginType(_email) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield IUser_1.User.findOne({ email: _email });
+        const user = yield UserModel_1.User.findOne({ email: _email });
         let loginType = null;
         if (user === null) {
             loginType = ENUMs_1.IUserType.NONE;
@@ -94,7 +94,7 @@ function User_GetLoginType(_email) {
 exports.User_GetLoginType = User_GetLoginType;
 function User_GetGoogleCredentials(_email, _googleID) {
     return __awaiter(this, void 0, void 0, function* () {
-        const googleCredential = yield IUser_1.User.findOne({
+        const googleCredential = yield UserModel_1.User.findOne({
             email: _email,
             googleID: _googleID,
         });
@@ -105,7 +105,7 @@ function User_GetGoogleCredentials(_email, _googleID) {
 exports.User_GetGoogleCredentials = User_GetGoogleCredentials;
 function User_GetLocalCredentials(_email) {
     return __awaiter(this, void 0, void 0, function* () {
-        const localCredential = yield IUser_1.User.findOne({
+        const localCredential = yield UserModel_1.User.findOne({
             email: _email,
         });
         return localCredential;

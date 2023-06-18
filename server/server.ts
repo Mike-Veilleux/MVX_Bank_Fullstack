@@ -15,7 +15,7 @@ app.use(function (req, res, next) {
   res.header(
     // "Content-Security-Policy-Report-Only",
     "Content-Security-Policy",
-    "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self' ; connect-src 'self' ws: https://ssl.gstatic.com;"
+    "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self' ; connect-src 'self' ws: https://accounts.google.com/gsi/client;"
   );
   res.header("Access-Control-Allow-Origin", req.header("origin"));
   res.header(

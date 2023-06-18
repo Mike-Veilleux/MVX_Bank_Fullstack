@@ -39,13 +39,11 @@ export const useUserStore = create<userStore>((set, get) => ({
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/user/new`,
-        // withCredentials: true,
         data: {
           newUser: _newUser,
         },
       });
       data = response.data;
-      // 201 = HTTP statuscode: Resource created
       if (data !== null) {
         const account_API = useAccountStore.getState().API;
         const newSavingAccount = CreateNewAccount(

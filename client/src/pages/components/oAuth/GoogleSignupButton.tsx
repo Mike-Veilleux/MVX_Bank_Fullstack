@@ -4,7 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { GoogleAccount } from "../../../interfaces/GoogleAccount";
 import { IUser } from "../../../interfaces/IUser";
 import { useUser_API } from "../../../stores/useUserStore";
-const GoogleSignupButton = () => {
+
+type PrivateProps = {
+  setShowSuccessAlert: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const GoogleSignUpButton = ({ setShowSuccessAlert }: PrivateProps) => {
   const user_API = useUser_API();
   const navigate = useNavigate();
 
@@ -29,8 +34,10 @@ const GoogleSignupButton = () => {
         password: "",
         googleID: userData.sub,
       };
+      setShowSuccessAlert(true);
       await user_API.CreateNewUser(newUser);
-      navigate("/home");
+      setLoading(false);
+      // navigate("/home");
     }
   }
 
@@ -72,4 +79,4 @@ const GoogleSignupButton = () => {
   );
 };
 
-export default GoogleSignupButton;
+export default GoogleSignUpButton;

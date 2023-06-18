@@ -14,13 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerAccount = void 0;
 const express_1 = __importDefault(require("express"));
-const DAL_1 = require("../DAL");
+const DAL_1 = require("../DAL/MongoDB/DAL");
 exports.routerAccount = express_1.default.Router();
 exports.routerAccount.post("/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newAccount = yield (0, DAL_1.Account_CreateNew)(req.body.account);
     res.send(newAccount);
 }));
 exports.routerAccount.post("/getBy-ownerId-and-type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Owner ID: ", req.body.ownersID);
+    console.log("account type: ", req.body.accountType);
     const account = yield (0, DAL_1.Account_GetByOwnerIdAndType)(req.body.ownersID, req.body.accountType);
     res.send(account);
 }));

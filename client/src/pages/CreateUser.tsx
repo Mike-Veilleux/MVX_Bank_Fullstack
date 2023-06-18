@@ -17,7 +17,7 @@ import {
   InputUserName,
 } from "./components/MvxInputs";
 import MvxToasts from "./components/MvxToasts";
-import GoogleSignupButton from "./components/oAuth/GoogleSignupButton";
+import GoogleSignUpButton from "./components/oAuth/GoogleSignUpButton";
 
 const CreateNewUser = () => {
   const user = useUser();
@@ -103,7 +103,7 @@ const CreateNewUser = () => {
               {isFirstUserCreated ? "Create Account" : "Create Another Account"}
             </Button>
             <div style={{ marginTop: "20px" }}>
-              <GoogleSignupButton />
+              <GoogleSignUpButton setShowSuccessAlert={setShowSuccessAlert} />
             </div>
           </Form>
         </Card.Body>

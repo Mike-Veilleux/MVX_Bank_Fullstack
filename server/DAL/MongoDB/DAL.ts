@@ -1,9 +1,12 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { IUserType } from "./interfaces/ENUMs";
-import { Account, IAccount } from "./interfaces/IAccount";
-import { ITransaction } from "./interfaces/ITransaction";
-import { IUser, User } from "./interfaces/IUser";
+import { IUserType } from "../../interfaces/ENUMs";
+import { IAccount } from "../../interfaces/IAccount";
+import { ITransaction } from "../../interfaces/ITransaction";
+import { IUser } from "../../interfaces/IUser";
+import { Account } from "./AccountModel";
+import { User } from "./UserModel";
+
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 mongoose.set("strictQuery", true);
@@ -70,7 +73,7 @@ export async function User_CreateNew(_newUser: IUser) {
   }
 }
 
-export async function User_GetUserLoginType(_email: string) {
+export async function User_GetLoginType(_email: string) {
   const user: IUser | null = await User.findOne({ email: _email });
   let loginType: IUserType | null = null;
   if (user === null) {
@@ -80,8 +83,6 @@ export async function User_GetUserLoginType(_email: string) {
   } else if (user.googleID !== "") {
     loginType = IUserType.GOOGLE;
   }
-
-  console.log(loginType);
   return loginType;
 }
 

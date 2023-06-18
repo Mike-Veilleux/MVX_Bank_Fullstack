@@ -16,15 +16,20 @@ export const DropboxAccount = () => {
       className="form-select"
       aria-label="Default select example"
       onChange={(e) => onChangeSelectedAccount(e)}
+      value={
+        account?.accountType === IAccountType.SAVINGS
+          ? `${IAccountType.SAVINGS}`
+          : `${IAccountType.CHECK}`
+      }
     >
       <option
-        selected={account?.accountType === IAccountType.SAVINGS ? true : false}
+        // selected={account?.accountType === IAccountType.SAVINGS ? true : false}
         value={`${IAccountType.SAVINGS}`}
       >
         {IAccountType.SAVINGS}
       </option>
       <option
-        selected={account?.accountType === IAccountType.CHECK ? true : false}
+        // selected={account?.accountType === IAccountType.CHECK ? true : false}
         value={`${IAccountType.CHECK}`}
       >
         {IAccountType.CHECK}

@@ -6,14 +6,26 @@ import {
   User_CreateNew,
   User_GetGoogleCredentials,
   User_GetLocalCredentials,
-  User_GetUserLoginType,
-} from "../DAL";
+  User_GetLoginType,
+} from "../DAL/MongoDB/DAL";
 import { IUserType } from "../interfaces/ENUMs";
 import { IUser } from "../interfaces/IUser";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 export const routerUser = express.Router();
+
+routerUser.post("/login-type", async (req: Request, res: Response) => {
+  const loginType: IUserType | null = await User_GetLoginType(req.body.email);
+  res.send(JSON.stringify(loginType));
+});
+
+routerUser.post("/new", async (req: Request, res: Response) => {
+  const newUser: IUser | null | undefined = await User_CreateNew(
+    req.body.newUser
+  );
+  res.send(newUser);
+});
 
 routerUser.post("/login-local", async (req: Request, res: Response) => {
   const user: IUser | null = await User_GetLocalCredentials(req.body.email);
@@ -71,13 +83,6 @@ routerUser.post("/login-google", async (req: Request, res: Response) => {
   }
 });
 
-routerUser.post("/login-type", async (req: Request, res: Response) => {
-  const loginType: IUserType | null = await User_GetUserLoginType(
-    req.body.email
-  );
-  res.send(JSON.stringify(loginType));
-});
-
 routerUser.post("/logout", (req: Request, res: Response) => {
   const token = jwt.sign(
     { value: "Expired" },
@@ -91,12 +96,4 @@ routerUser.post("/logout", (req: Request, res: Response) => {
       maxAge: 0,
     })
     .send({});
-});
-
-routerUser.post("/new", async (req: Request, res: Response) => {
-  const newUser: IUser | null | undefined = await User_CreateNew(
-    req.body.newUser
-  );
-  console.log("From API", newUser);
-  res.send(newUser);
 });

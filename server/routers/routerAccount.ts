@@ -4,7 +4,7 @@ import {
   Account_CreateNew,
   Account_GetByOwnerIdAndType,
   Account_UpdateBalance,
-} from "../DAL";
+} from "../DAL/MongoDB/DAL";
 import { IAccount } from "../interfaces/IAccount";
 
 export const routerAccount = express.Router();
@@ -17,6 +17,8 @@ routerAccount.post("/new", async (req: Request, res: Response) => {
 routerAccount.post(
   "/getBy-ownerId-and-type",
   async (req: Request, res: Response) => {
+    console.log("Owner ID: ", req.body.ownersID);
+    console.log("account type: ", req.body.accountType);
     const account: IAccount | null = await Account_GetByOwnerIdAndType(
       req.body.ownersID,
       req.body.accountType
