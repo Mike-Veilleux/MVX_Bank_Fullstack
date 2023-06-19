@@ -86,15 +86,10 @@ export async function User_GetLoginType(_email: string) {
   return loginType;
 }
 
-export async function User_GetGoogleCredentials(
-  _email: string,
-  _googleID: string
-) {
+export async function User_GetGoogleCredentials(_email: string) {
   const googleCredential: IUser | null = await User.findOne({
     email: _email,
-    googleID: _googleID,
   });
-  console.log(googleCredential);
   return googleCredential;
 }
 

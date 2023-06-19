@@ -54,21 +54,29 @@ exports.routerUser.post("/login-local", (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 exports.routerUser.post("/login-google", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const googleCredentials = yield (0, DAL_1.User_GetGoogleCredentials)(req.body.email, req.body.googleID);
+    const googleCredentials = yield (0, DAL_1.User_GetGoogleCredentials)(req.body.email);
+    console.log("API - googleCredentials: ", googleCredentials === null || googleCredentials === void 0 ? void 0 : googleCredentials.googleID);
     if (googleCredentials === null) {
         res.status(204).send();
     }
     else {
-        const userID = googleCredentials._id;
-        const token = jsonwebtoken_1.default.sign({ value: userID }, process.env.SESSION_TOKEN_SECRET);
-        res
-            .cookie("mvx_jwt", token, {
-            httpOnly: true,
-            sameSite: "none",
-            secure: true,
-            maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
-        })
-            .send(googleCredentials);
+        bcrypt_1.default.compare(req.body.googleID, googleCredentials.googleID, (err, result) => {
+            if (result === true) {
+                const userID = googleCredentials._id;
+                const token = jsonwebtoken_1.default.sign({ value: userID }, process.env.SESSION_TOKEN_SECRET);
+                res
+                    .cookie("mvx_jwt", token, {
+                    httpOnly: true,
+                    sameSite: "none",
+                    secure: true,
+                    maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
+                })
+                    .send(googleCredentials);
+            }
+            else {
+                res.status(204).send();
+            }
+        });
     }
 }));
 exports.routerUser.post("/logout", (req, res) => {

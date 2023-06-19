@@ -43,7 +43,6 @@ routerUser.post("/login-local", async (req: Request, res: Response) => {
             { value: userID },
             process.env.SESSION_TOKEN_SECRET!
           );
-
           res
             .cookie("mvx_jwt", token, {
               httpOnly: true,
@@ -62,24 +61,34 @@ routerUser.post("/login-local", async (req: Request, res: Response) => {
 
 routerUser.post("/login-google", async (req: Request, res: Response) => {
   const googleCredentials: IUser | null | undefined =
-    await User_GetGoogleCredentials(req.body.email, req.body.googleID);
+    await User_GetGoogleCredentials(req.body.email);
+  console.log("API - googleCredentials: ", googleCredentials?.googleID);
   if (googleCredentials === null) {
     res.status(204).send();
   } else {
-    const userID = googleCredentials!._id;
-    const token = jwt.sign(
-      { value: userID },
-      process.env.SESSION_TOKEN_SECRET!
+    bcrypt.compare(
+      req.body.googleID,
+      googleCredentials.googleID!,
+      (err: any, result: any) => {
+        if (result === true) {
+          const userID = googleCredentials!._id;
+          const token = jwt.sign(
+            { value: userID },
+            process.env.SESSION_TOKEN_SECRET!
+          );
+          res
+            .cookie("mvx_jwt", token, {
+              httpOnly: true,
+              sameSite: "none",
+              secure: true,
+              maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
+            })
+            .send(googleCredentials);
+        } else {
+          res.status(204).send();
+        }
+      }
     );
-
-    res
-      .cookie("mvx_jwt", token, {
-        httpOnly: true,
-        sameSite: "none",
-        secure: true,
-        maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
-      })
-      .send(googleCredentials);
   }
 });
 

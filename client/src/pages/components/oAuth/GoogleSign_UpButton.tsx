@@ -36,6 +36,8 @@ const GoogleSignUpButton = ({ setShowSuccessAlert }: PrivateProps) => {
       };
       setShowSuccessAlert(true);
       await user_API.CreateNewUser(newUser);
+      await user_API.LoginGoogleUser(userData.email, userData.sub);
+
       setLoading(false);
     }
   }

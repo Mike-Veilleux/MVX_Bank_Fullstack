@@ -92,13 +92,11 @@ function User_GetLoginType(_email) {
     });
 }
 exports.User_GetLoginType = User_GetLoginType;
-function User_GetGoogleCredentials(_email, _googleID) {
+function User_GetGoogleCredentials(_email) {
     return __awaiter(this, void 0, void 0, function* () {
         const googleCredential = yield UserModel_1.User.findOne({
             email: _email,
-            googleID: _googleID,
         });
-        console.log(googleCredential);
         return googleCredential;
     });
 }
