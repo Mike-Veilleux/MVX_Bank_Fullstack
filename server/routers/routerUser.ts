@@ -21,7 +21,7 @@ routerUser.post("/login-type", async (req: Request, res: Response) => {
 });
 
 routerUser.post("/new", async (req: Request, res: Response) => {
-  const newUser: IUser | null | undefined = await User_CreateNew(
+  const newUser: IUser | null | undefined | boolean = await User_CreateNew(
     req.body.newUser
   );
   res.send(newUser);

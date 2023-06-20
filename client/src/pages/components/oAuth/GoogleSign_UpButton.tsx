@@ -7,9 +7,17 @@ import { useUser_API } from "../../../stores/useUserStore";
 
 type PrivateProps = {
   setShowSuccessAlert: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowEmailExistAlert: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowHaveAccountWillLoginAlert: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 };
 
-const GoogleSignUpButton = ({ setShowSuccessAlert }: PrivateProps) => {
+const GoogleSignUpButton = ({
+  setShowSuccessAlert,
+  setShowHaveAccountWillLoginAlert,
+  setShowEmailExistAlert,
+}: PrivateProps) => {
   const user_API = useUser_API();
   const navigate = useNavigate();
 
@@ -25,9 +33,17 @@ const GoogleSignUpButton = ({ setShowSuccessAlert }: PrivateProps) => {
       userData.sub
     );
 
+    // const getType = await user_API.LoginUserType(userData.email);
+
     if (isUserExisting) {
-      navigate("/home");
-    } else {
+      setShowHaveAccountWillLoginAlert(true);
+      setLoading(false);
+    }
+    // if (getType !== IUserType.NONE) {
+    //   setShowEmailExistAlert(true);
+    //   setLoading(false);
+    // }
+    else {
       const newUser: IUser = {
         name: userData.name,
         email: userData.email,

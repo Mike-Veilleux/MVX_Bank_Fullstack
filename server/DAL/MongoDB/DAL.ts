@@ -69,7 +69,7 @@ export async function User_CreateNew(_newUser: IUser) {
     const newUser: IUser | null = await dbModel.save();
     return newUser;
   } else {
-    return null;
+    return false;
   }
 }
 

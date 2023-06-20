@@ -27,6 +27,8 @@ const CreateNewUser = () => {
   const account_API = useAccount_API();
 
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const [showHaveAccountWillLoginAlert, setShowHaveAccountWillLoginAlert] =
+    useState<boolean>(false);
   const [showEmailExistAlert, setShowEmailExistAlert] =
     useState<boolean>(false);
   const [isFirstUserCreated, setIsFirstUserCreated] = useState(true);
@@ -103,7 +105,13 @@ const CreateNewUser = () => {
               {isFirstUserCreated ? "Create Account" : "Create Another Account"}
             </Button>
             <div style={{ marginTop: "20px" }}>
-              <GoogleSignUpButton setShowSuccessAlert={setShowSuccessAlert} />
+              <GoogleSignUpButton
+                setShowSuccessAlert={setShowSuccessAlert}
+                setShowHaveAccountWillLoginAlert={
+                  setShowHaveAccountWillLoginAlert
+                }
+                setShowEmailExistAlert={setShowEmailExistAlert}
+              />
             </div>
           </Form>
         </Card.Body>
@@ -115,6 +123,16 @@ const CreateNewUser = () => {
         date={null}
         body={"This email address is already used!"}
         color={"danger"}
+      />
+      <MvxToasts
+        show={showHaveAccountWillLoginAlert}
+        setShow={setShowHaveAccountWillLoginAlert}
+        title={""}
+        date={null}
+        body={
+          "You have an account linked tro this email address already, you are now logged in!"
+        }
+        color={"success"}
       />
 
       <MvxToasts
