@@ -28,21 +28,24 @@ routerUser.post("/new", async (req: Request, res: Response) => {
 });
 
 routerUser.post("/login-local", async (req: Request, res: Response) => {
-  const user: IUser | null = await User_GetLocalCredentials(req.body.email);
+  const localUser: IUser | null = await User_GetLocalCredentials(
+    req.body.email
+  );
 
-  if (user === undefined || user === null) {
+  if (localUser === undefined || localUser === null) {
     res.status(204).send();
   } else {
     bcrypt.compare(
       req.body.password,
-      user?.password!,
+      localUser?.password!,
       (err: any, result: any) => {
         if (result === true) {
-          const userID = user!._id;
+          const userID = localUser!._id;
           const token = jwt.sign(
             { value: userID },
             process.env.SESSION_TOKEN_SECRET!
           );
+          localUser.password = "";
           res
             .cookie("mvx_jwt", token, {
               httpOnly: true,
@@ -50,7 +53,7 @@ routerUser.post("/login-local", async (req: Request, res: Response) => {
               secure: true,
               maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
             })
-            .send(user);
+            .send(localUser);
         } else {
           res.status(204).send();
         }
@@ -60,22 +63,24 @@ routerUser.post("/login-local", async (req: Request, res: Response) => {
 });
 
 routerUser.post("/login-google", async (req: Request, res: Response) => {
-  const googleCredentials: IUser | null | undefined =
-    await User_GetGoogleCredentials(req.body.email);
-  console.log("API - googleCredentials: ", googleCredentials?.googleID);
-  if (googleCredentials === null) {
+  const googleUser: IUser | null | undefined = await User_GetGoogleCredentials(
+    req.body.email
+  );
+  console.log("API - googleCredentials: ", googleUser?.googleID);
+  if (googleUser === null) {
     res.status(204).send();
   } else {
     bcrypt.compare(
       req.body.googleID,
-      googleCredentials.googleID!,
+      googleUser.googleID!,
       (err: any, result: any) => {
         if (result === true) {
-          const userID = googleCredentials!._id;
+          const userID = googleUser!._id;
           const token = jwt.sign(
             { value: userID },
             process.env.SESSION_TOKEN_SECRET!
           );
+          googleUser.googleID = "";
           res
             .cookie("mvx_jwt", token, {
               httpOnly: true,
@@ -83,7 +88,7 @@ routerUser.post("/login-google", async (req: Request, res: Response) => {
               secure: true,
               maxAge: 9 * 60 * 60 * 1000, // hours x minutes x seconds x milliseconds
             })
-            .send(googleCredentials);
+            .send(googleUser);
         } else {
           res.status(204).send();
         }

@@ -101,6 +101,10 @@ Run project
 npm run dev
 ```
 
+## API Documentation
+
+The API end points where made with Postman. See the online specifications [here](https://documenter.getpostman.com/view/26121348/2s93z59QUw#fbfac34a-3faf-4d36-8864-873566257a31) for each end-point
+
 ## Database
 
 If you don't have [MongoDB & Compass](https://www.mongodb.com/docs/compass/master/install/) installed locally you will need to get that up and running. You can also run it from a [Docker](https://www.docker.com/products/docker-desktop/) container from the following terminal command:
