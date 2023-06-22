@@ -70,7 +70,7 @@ function User_CreateNew(_newUser) {
             return newUser;
         }
         else {
-            return null;
+            return false;
         }
     });
 }

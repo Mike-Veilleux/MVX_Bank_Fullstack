@@ -35,7 +35,7 @@ export const useUserStore = create<userStore>((set, get) => ({
   },
   API: {
     CreateNewUser: async (_newUser) => {
-      let data: IUser | null;
+      let data: IUser | boolean;
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/user/new`,
@@ -44,7 +44,7 @@ export const useUserStore = create<userStore>((set, get) => ({
         },
       });
       data = response.data;
-      if (data !== null) {
+      if (data !== false && typeof data !== "boolean") {
         const account_API = useAccountStore.getState().API;
         const newSavingAccount = CreateNewAccount(
           IAccountType.SAVINGS,
@@ -57,7 +57,7 @@ export const useUserStore = create<userStore>((set, get) => ({
         account_API.CreateNewAccount(newSavingAccount);
         account_API.CreateNewAccount(newCheckAccount);
         account_API.FetchAndSetActiveAccount(data!._id!, IAccountType.SAVINGS);
-        set((state) => ({ user: data }));
+        set((state) => ({ user: data as IUser }));
         return true;
       } else {
         return false;
@@ -74,7 +74,7 @@ export const useUserStore = create<userStore>((set, get) => ({
           password: _password,
         },
       });
-      if (response.status === 204) {
+      if (response === null) {
         // show no user found toast
         return false;
       } else {
