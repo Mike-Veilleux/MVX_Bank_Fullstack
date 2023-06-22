@@ -24,6 +24,11 @@ routerUser.post("/new", async (req: Request, res: Response) => {
   const newUser: IUser | null | undefined | boolean = await User_CreateNew(
     req.body.newUser
   );
+  //remove sensitive data - not needed in front end
+  if (typeof newUser === "object") {
+    newUser.password = "";
+    newUser.googleID = "";
+  }
   res.send(newUser);
 });
 

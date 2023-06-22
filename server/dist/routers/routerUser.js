@@ -26,6 +26,11 @@ exports.routerUser.post("/login-type", (req, res) => __awaiter(void 0, void 0, v
 }));
 exports.routerUser.post("/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newUser = yield (0, DAL_1.User_CreateNew)(req.body.newUser);
+    //remove sensitive data - not needed in front end
+    if (typeof newUser === "object") {
+        newUser.password = "";
+        newUser.googleID = "";
+    }
     res.send(newUser);
 }));
 exports.routerUser.post("/login-local", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
