@@ -11,14 +11,18 @@ const Home = () => {
         {/* <Card.Title>Ripping you off openly!</Card.Title> */}
         <img src={bank} width={200} style={{ marginTop: "20px" }} />
         <Card.Text style={{ padding: "20px", textAlign: "justify" }}>
-          At Bad Bank, we have total disregard for your privacy. All data will
-          be stored in your browser's local storage, for everyone's convenience.{" "}
+          Bad Bank had a reputation of having poor security for its customers.
+          We are happy to announce that we have updated our codebase.
           <br />
           <br />
-          Our upcoming fullstack developer Mike, is quickly learning about
-          back-end and database technology. <br />
+          We are now rebranded as MVX Bank and offer a fully secure banking
+          experience. All sessions are now secured with the best techniques.{" "}
           <br />
-          <strong>So hurry up, this is a limited offer!</strong>
+          <br />
+          <strong>
+            All your sensitive data is encrypted and stored on our secured
+            server.
+          </strong>
         </Card.Text>
       </Card.Body>
     </Card>
