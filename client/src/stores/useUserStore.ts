@@ -74,7 +74,7 @@ export const useUserStore = create<userStore>((set, get) => ({
           password: _password,
         },
       });
-      if (response === null) {
+      if (response !== null) {
         // show no user found toast
         return false;
       } else {

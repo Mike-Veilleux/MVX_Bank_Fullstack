@@ -33,30 +33,3 @@ export const transactionAmountSchema = yup.object({
       Number.isInteger(value)
     ),
 });
-
-// validate: (values) => {
-//   let errors = {} as ICreateAccountForm;
-//   if (!values.fullName) {
-//     errors.fullName = "Name required";
-//   }
-//   if (!values.email) {
-//     errors.email = "Email required";
-//   } else if (
-//     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,63}$/i.test(values.email!)
-//   ) {
-//     errors.email = "This is not a valid email!";
-//   }
-//   const existingAccounts = accountStore!;
-//   const matchingEmail = existingAccounts?.find(
-//     (acc) => acc.credentials?.email === values.email
-//   );
-//   if (matchingEmail) {
-//     errors.email = "This email address is already used!";
-//   }
-//   if (!values.password) {
-//     errors.password = "Password required";
-//   } else if (values.password.length < 8) {
-//     errors.password = "Your password need to have at least 8 characters!";
-//   }
-//   return errors;
-// },

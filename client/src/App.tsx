@@ -17,9 +17,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/restricted-access" element={<RestrictedAccessMsg />} />
         <Route path="/create-account" element={<CreateNewUser />} />
-        {/* <Route path="/all-data" element={<AllData />} /> */}
+        <Route path="/restricted-access" element={<RestrictedAccessMsg />} />
 
         {/* PROTECTED ROUTES */}
         <Route

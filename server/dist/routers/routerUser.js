@@ -54,7 +54,7 @@ exports.routerUser.post("/login-local", (req, res) => __awaiter(void 0, void 0, 
                     .send(localUser);
             }
             else {
-                res.status(204).send();
+                res.status(204).send(null);
             }
         });
     }

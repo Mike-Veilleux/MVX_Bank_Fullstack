@@ -33,17 +33,10 @@ const GoogleSignUpButton = ({
       userData.sub
     );
 
-    // const getType = await user_API.LoginUserType(userData.email);
-
     if (isUserExisting) {
       setShowHaveAccountWillLoginAlert(true);
       setLoading(false);
-    }
-    // if (getType !== IUserType.NONE) {
-    //   setShowEmailExistAlert(true);
-    //   setLoading(false);
-    // }
-    else {
+    } else {
       const newUser: IUser = {
         name: userData.name,
         email: userData.email,

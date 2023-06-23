@@ -8,7 +8,6 @@ const Home = () => {
         Welcome To MVX Bank
       </Card.Header>
       <Card.Body>
-        {/* <Card.Title>Ripping you off openly!</Card.Title> */}
         <img src={bank} width={200} style={{ marginTop: "20px" }} />
         <Card.Text style={{ padding: "20px", textAlign: "justify" }}>
           Bad Bank had a reputation of having poor security for its customers.

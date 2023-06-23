@@ -40,10 +40,6 @@ const GoogleLogin = () => {
         navigate("/home");
       }
     }
-    // user_API.MailMessage(
-    //   userData.email,
-    //   `Hi ${userData.given_name}, You just login MVX Bank!`
-    // );
   }
 
   useEffect(() => {
@@ -60,7 +56,6 @@ const GoogleLogin = () => {
       size: "large",
       width: "350px",
       logo_alignment: "center",
-      text: "signin_with",
       locale: "en",
     });
   }, []);

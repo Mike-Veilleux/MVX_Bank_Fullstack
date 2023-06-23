@@ -60,7 +60,7 @@ routerUser.post("/login-local", async (req: Request, res: Response) => {
             })
             .send(localUser);
         } else {
-          res.status(204).send();
+          res.status(204).send(null);
         }
       }
     );
