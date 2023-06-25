@@ -26,6 +26,7 @@ const Login = () => {
         values.email!,
         values.password!
       );
+      console.log("Is valid login", isValidLogin);
       if (isValidLogin) {
         resetForm({ values: initialFormValues });
         navigate("/home");

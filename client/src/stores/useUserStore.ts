@@ -68,17 +68,17 @@ export const useUserStore = create<userStore>((set, get) => ({
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/user/login-local`,
-        withCredentials: true,
+        // withCredentials: true,
         data: {
           email: _email,
           password: _password,
         },
       });
-      if (response !== null) {
+      data = response.data;
+      if (data === undefined) {
         // show no user found toast
         return false;
       } else {
-        data = response.data;
         const account_API = useAccountStore.getState().API;
         account_API.FetchAndSetActiveAccount(data!._id!, IAccountType.SAVINGS);
         set((state) => ({ user: data }));
