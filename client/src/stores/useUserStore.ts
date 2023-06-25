@@ -75,7 +75,7 @@ export const useUserStore = create<userStore>((set, get) => ({
         },
       });
       data = response.data;
-      if (data.email !== "") {
+      if (typeof data === "string") {
         // show no user found toast
         return false;
       } else {
