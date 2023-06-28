@@ -17,6 +17,8 @@ routerAccount.post("/new", async (req: Request, res: Response) => {
 routerAccount.post(
   "/getBy-ownerId-and-type",
   async (req: Request, res: Response) => {
+    // console.log("Get Account: ", req.body.ownersID, req.body.accountType);
+
     const account: IAccount | null = await Account_GetByOwnerIdAndType(
       req.body.ownersID,
       req.body.accountType

@@ -68,7 +68,7 @@ export const useUserStore = create<userStore>((set, get) => ({
       const response = await axios({
         method: "POST",
         url: `${import.meta.env.VITE_API_BASE_URL}/user/login-local`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           email: _email,
           password: _password,

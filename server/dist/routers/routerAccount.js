@@ -21,6 +21,7 @@ exports.routerAccount.post("/new", (req, res) => __awaiter(void 0, void 0, void 
     res.send(newAccount);
 }));
 exports.routerAccount.post("/getBy-ownerId-and-type", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // console.log("Get Account: ", req.body.ownersID, req.body.accountType);
     const account = yield (0, DAL_1.Account_GetByOwnerIdAndType)(req.body.ownersID, req.body.accountType);
     res.send(account);
 }));
